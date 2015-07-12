@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="linkage.web:war">
+    <output-path>$PROJECT_DIR$/linkage.web/target</output-path>
+    <root id="archive" name="linkage.web-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="linkage.web:war exploded" />
+    </root>
+  </artifact>
+</component>
