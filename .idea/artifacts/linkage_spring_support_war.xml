@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="linkage.spring.support:war">
-    <output-path>$PROJECT_DIR$/linkage.spring.support/target</output-path>
-    <root id="archive" name="linkage.spring.support-0.0.1-SNAPSHOT.war">
-      <element id="artifact" artifact-name="linkage.spring.support:war exploded" />
-    </root>
-  </artifact>
-</component>

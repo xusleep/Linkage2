@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="linkage.test:war">
-    <output-path>$PROJECT_DIR$/linkage.test/target</output-path>
-    <root id="archive" name="linkage.test-0.0.1-SNAPSHOT.war">
-      <element id="artifact" artifact-name="linkage.test:war exploded" />
-    </root>
-  </artifact>
-</component>

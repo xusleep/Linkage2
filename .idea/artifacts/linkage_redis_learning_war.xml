@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="linkage.redis.learning:war">
-    <output-path>$PROJECT_DIR$/linkage.redis.learning/target</output-path>
-    <root id="archive" name="linkage.redis.learning-0.0.1-SNAPSHOT.war">
-      <element id="artifact" artifact-name="linkage.redis.learning:war exploded" />
-    </root>
-  </artifact>
-</component>
