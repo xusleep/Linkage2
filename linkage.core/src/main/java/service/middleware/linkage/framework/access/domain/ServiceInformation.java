@@ -6,72 +6,48 @@ package service.middleware.linkage.framework.access.domain;
  *
  */
 public class ServiceInformation {
-	private String serviceName;
-	private String serviceMethod;
-	private String address;
-	private String serviceVersion;
-	private int    port;
+	private final String id;
+	private final String serviceName;
+	private final String serviceMethod;
+	private final String address;
+	private final String serviceVersion;
+	private final int    port;
 	
-	public ServiceInformation(){
-	}
-	
-	public ServiceInformation(String address, int port, String serviceName, String serviceMethod, String serviceVersion)
+	public ServiceInformation(String id, String address, int port, String serviceName, String serviceMethod, String serviceVersion)
 	{
+		this.id = id;
 		this.address = address;
 		this.port = port;
 		this.serviceName = serviceName;
 		this.serviceMethod = serviceMethod;
 		this.serviceVersion = serviceVersion;
 	}
-	
-	public String getAddress() {
-		return address;
+
+	public String getId() {
+		return id;
 	}
-	
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	
-	public int getPort() {
-		return port;
-	}
-	
-	public void setPort(int port) {
-		this.port = port;
-	}
-	
+
 	public String getServiceName() {
 		return serviceName;
 	}
-	
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
-	
+
 	public String getServiceMethod() {
 		return serviceMethod;
 	}
-	
-	public void setServiceMethod(String serviceMethod) {
-		this.serviceMethod = serviceMethod;
+
+	public String getAddress() {
+		return address;
 	}
 
 	public String getServiceVersion() {
 		return serviceVersion;
 	}
 
-	public void setServiceVersion(String serviceVersion) {
-		this.serviceVersion = serviceVersion;
+	public int getPort() {
+		return port;
 	}
 
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return this.address + "_" +  this.port + "_UNIQUE_STRING";
+	public String toLocalKey(){
+		return address + "_" + port;
 	}
-	
-	public String toDetailString(){
-		return this.toString() + "_" + this.serviceName + "_" + this.serviceMethod + "_" + this.serviceVersion;
-	}
-	
 }

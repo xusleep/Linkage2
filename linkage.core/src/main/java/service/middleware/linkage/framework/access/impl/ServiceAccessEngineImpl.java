@@ -8,26 +8,24 @@ import service.middleware.linkage.framework.access.domain.ServiceInformation;
 import service.middleware.linkage.framework.access.domain.ServiceRequest;
 import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
 import service.middleware.linkage.framework.access.domain.ServiceResponse;
-import service.middleware.linkage.framework.connection.pool.NIOConnectionPoolManager;
+import service.middleware.linkage.framework.connection.pool.NIOConnectionManager;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.io.WorkerPool;
-import service.middleware.linkage.framework.io.WorkingChannelContext;
 import service.middleware.linkage.framework.io.nio.NIOWorkingChannelContext;
 import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataWriteEvent;
+import service.middleware.linkage.framework.repository.WorkingChannelRepository;
+import service.middleware.linkage.framework.repository.domain.WorkingChannelStoreBean;
 import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.setting.ClientSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
 
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
-import java.util.Enumeration;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * this an engine class of consume
@@ -35,42 +33,13 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author zhonxu
  */
 public class ServiceAccessEngineImpl implements ServiceAccessEngine {
-    /**
-     * used to cached the {@link WorkingChannelContext} object
-     */
-    private final HashMap<String, WorkingChannelContext> workingChannelCacheList = new HashMap<String, WorkingChannelContext>(16);
-    private AtomicLong idGenerator = new AtomicLong(0);
     private final WorkerPool workerPool;
     private static Logger logger = LoggerFactory.getLogger(ServiceAccessEngineImpl.class);
     private final ClientSettingReader workingClientPropertyEntity;
-    // use the concurrent hash map to store the request result list {@link ServiceRequestResult}
-    private final ConcurrentHashMap<String, ServiceRequestResult> resultList = new ConcurrentHashMap<String, ServiceRequestResult>(2048);
 
     public ServiceAccessEngineImpl(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool) {
         this.workingClientPropertyEntity = workingClientPropertyEntity;
         this.workerPool = workerPool;
-    }
-
-    /**
-     * put the request result in the result list
-     *
-     * @param serviceRequestResult
-     */
-    public void offerRequestResult(ServiceRequestResult serviceRequestResult) {
-        resultList.put(serviceRequestResult.getRequestID(), serviceRequestResult);
-    }
-
-    /**
-     * clear the result
-     */
-    public void clearAllResult(ServiceException exception) {
-        Enumeration<String> keyEnumeration = resultList.keys();
-        while (keyEnumeration.hasMoreElements()) {
-            String requestID = keyEnumeration.nextElement();
-            ServiceRequestResult serviceRequestResult = resultList.get(requestID);
-            setExceptionToRuquestResult(serviceRequestResult, exception);
-        }
-        resultList.clear();
     }
 
     /**
@@ -146,10 +115,12 @@ public class ServiceAccessEngineImpl implements ServiceAccessEngine {
      */
     public ServiceRequestResult basicProcessRequest(ServiceRequest objRequestEntity, ServiceRequestResult result,
                                                     ServiceInformation serviceInformation, boolean channelFromCached) {
+        WorkingChannelStoreBean workingChannelStoreBean = null;
         NIOWorkingChannelContext newWorkingChannel = null;
         NIOMixedStrategy strategy = null;
         try {
-            newWorkingChannel = (NIOWorkingChannelContext) getWorkingChannnel(channelFromCached, serviceInformation);
+            workingChannelStoreBean = getWorkingChannnelStoreBean(serviceInformation);
+            newWorkingChannel = (NIOWorkingChannelContext) workingChannelStoreBean.getWorkingChannelContext();
             result.setWorkingChannel(newWorkingChannel);
             strategy = (NIOMixedStrategy) newWorkingChannel.getWorkingChannelStrategy();
         } catch (Exception ex) {
@@ -175,38 +146,26 @@ public class ServiceAccessEngineImpl implements ServiceAccessEngine {
      * get a working channel from repository,
      * if not existed, create a new one
      *
-     * @param fromCached get it from the repository or not
      * @return
      * @throws ExecutionException
      * @throws InterruptedException
      * @throws IOException
      * @throws Exception
      */
-    private WorkingChannelContext getWorkingChannnel(boolean fromCached, ServiceInformation service) throws IOException, InterruptedException, ExecutionException, Exception {
+    private WorkingChannelStoreBean getWorkingChannnelStoreBean(ServiceInformation service) throws IOException, InterruptedException, ExecutionException, Exception {
         if (service == null)
             return null;
-        String cacheID = service.toString();
-        NIOWorkingChannelContext objWorkingChannel;
-        // if not get it from the repository, create it directly
-        if (!fromCached) {
-            objWorkingChannel = createWorkingChannel(service, WorkingChannelMode.MIXED);
-            objWorkingChannel.setId(cacheID);
-            return objWorkingChannel;
-        }
-        objWorkingChannel = (NIOWorkingChannelContext) workingChannelCacheList.get(cacheID);
-        if (objWorkingChannel == null) {
-            synchronized (workingChannelCacheList) {
-                // get the working channel again
-                // in case we set after we get from the repository
-                objWorkingChannel = (NIOWorkingChannelContext) workingChannelCacheList.get(service.toString());
-                if (objWorkingChannel == null) {
-                    objWorkingChannel = createWorkingChannel(service, WorkingChannelMode.MIXED);
-                    objWorkingChannel.setId(cacheID);
-                    workingChannelCacheList.put(cacheID, objWorkingChannel);
+        WorkingChannelStoreBean workingChannelStoreBean = WorkingChannelRepository.getWorkingChannelStoreBean(service.getId());
+        if (workingChannelStoreBean == null) {
+            synchronized (WorkingChannelRepository.class) {
+                workingChannelStoreBean = WorkingChannelRepository.getWorkingChannelStoreBean(service.toLocalKey());
+                if (workingChannelStoreBean == null) {
+                    NIOWorkingChannelContext objWorkingChannel = createWorkingChannel(service, WorkingChannelMode.MIXED);
+                    workingChannelStoreBean = new WorkingChannelStoreBean(objWorkingChannel, new LinkedList<ServiceRequestResult>());
                 }
             }
         }
-        return objWorkingChannel;
+        return workingChannelStoreBean;
     }
 
     /**
@@ -251,34 +210,9 @@ public class ServiceAccessEngineImpl implements ServiceAccessEngine {
      * @throws ServiceException
      */
     private NIOWorkingChannelContext createWorkingChannel(ServiceInformation service, WorkingChannelMode workingChannelMode) throws IOException, ServiceException {
-        SocketChannel channel = NIOConnectionPoolManager.getIOConnection(service.getAddress(), service.getPort());
+        SocketChannel channel = NIOConnectionManager.createNIOConnection(service.getAddress(), service.getPort());
         NIOWorkingChannelContext objWorkingChannel = (NIOWorkingChannelContext) this.workerPool.register(channel, workingChannelMode);
+        objWorkingChannel.setId(service.toLocalKey());
         return objWorkingChannel;
-    }
-
-    /**
-     * remove the channel from the repository
-     */
-    public void removeCachedChannel(WorkingChannelContext objWorkingChannel) {
-        if (objWorkingChannel != null) {
-            synchronized (workingChannelCacheList) {
-                this.workingChannelCacheList.remove(((NIOWorkingChannelContext) objWorkingChannel).getId());
-            }
-        }
-    }
-
-    /**
-     * close the channel by request result
-     * the client could determine close the channel or not
-     * this method is used along with method prcessRequestPerConnect
-     * don't use it along with method prcessRequest
-     *
-     * @param objServiceRequestResult
-     */
-    public void closeChannelByRequestResult(ServiceRequestResult objServiceRequestResult) {
-        removeCachedChannel(objServiceRequestResult.getWorkingChannel());
-        if (objServiceRequestResult.getWorkingChannel() != null) {
-            objServiceRequestResult.getWorkingChannel().closeWorkingChannel();
-        }
     }
 }
