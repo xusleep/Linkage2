@@ -21,4 +21,6 @@ public abstract class WorkingChannelStrategy implements WorkingChannelReadWrite{
 	public NIOWorkingChannelContext getWorkingChannelContext() {
 		return workingChannelContext;
 	}
+
+	public abstract void closeStrategy();
 }

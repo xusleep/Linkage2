@@ -12,11 +12,6 @@ import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
  */
 public interface WorkingChannelContext extends WorkingChannelReadWrite {
 	public LinkageSocketChannel getLinkageSocketChannel();
-	/**
-	 * get the current worker for this channel
-	 * @return
-	 */
-	public Worker getWorker();
 	public void closeWorkingChannel();
 	public WorkingChannelMode getWorkingChannelMode();
 	public WorkingChannelStrategy getWorkingChannelStrategy();

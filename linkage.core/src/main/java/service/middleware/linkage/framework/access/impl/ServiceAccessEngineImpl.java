@@ -250,7 +250,7 @@ public class ServiceAccessEngineImpl implements ServiceAccessEngine {
      * @throws ServiceException
      */
     private NIOWorkingChannelContext createWorkingChannel(ServiceInformation service, WorkingChannelMode workingChannelMode) throws IOException, ServiceException {
-        SocketChannel channel = NIOConnectionPoolManager.getIOConnection(service.getAddress() + ":" + service.getPort());
+        SocketChannel channel = NIOConnectionPoolManager.getIOConnection(service.getAddress(), service.getPort());
         NIOWorkingChannelContext objWorkingChannel = (NIOWorkingChannelContext) this.workerPool.register(channel, workingChannelMode);
         return objWorkingChannel;
     }

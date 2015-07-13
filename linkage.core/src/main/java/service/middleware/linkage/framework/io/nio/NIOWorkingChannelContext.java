@@ -3,7 +3,6 @@ package service.middleware.linkage.framework.io.nio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
-import service.middleware.linkage.framework.io.Worker;
 import service.middleware.linkage.framework.io.WorkingChannelContext;
 import service.middleware.linkage.framework.io.WorkingChannelOperationResult;
 import service.middleware.linkage.framework.io.WorkingChannelStrategy;
@@ -22,7 +21,6 @@ import java.nio.channels.SocketChannel;
  */
 public class NIOWorkingChannelContext implements WorkingChannelContext {
     private final LinkageSocketChannel channel;
-    private Worker worker;
     private String workingChannelCacheID;
     private SelectionKey key;
     private volatile WorkingChannelMode workingMode;
@@ -30,9 +28,8 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
     private static Logger logger = LoggerFactory.getLogger(NIOWorkingChannelContext.class);
     private final EventDistributionMaster eventDistributionHandler;
 
-    public NIOWorkingChannelContext(Channel channel, WorkingChannelMode workingMode, Worker worker, EventDistributionMaster eventDistributionHandler) {
+    public NIOWorkingChannelContext(Channel channel, WorkingChannelMode workingMode, EventDistributionMaster eventDistributionHandler) {
         this.channel = new LinkageSocketChannel((SocketChannel) channel);
-        this.worker = worker;
         this.eventDistributionHandler = eventDistributionHandler;
         setWorkingStrategy(workingMode);
     }
@@ -63,18 +60,15 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 
     /**
      * close the channel
-     *
      */
+    @Override
     public void closeWorkingChannel() {
         logger.debug("close working channel.");
-        if(this.getKey() != null){
+        if (this.getKey() != null) {
             key.cancel();
         }
         this.getLinkageSocketChannel().close();
-    }
-
-    public Worker getWorker() {
-        return worker;
+        this.getWorkingChannelStrategy().closeStrategy();
     }
 
     public LinkageSocketChannel getLinkageSocketChannel() {
@@ -101,3 +95,5 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
         this.key = key;
     }
 }
+
+

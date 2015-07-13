@@ -2,28 +2,17 @@ package service.middleware.linkage.framework.io.nio.strategy.mixed;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.middleware.linkage.framework.FileInformationStorageList;
-import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
 import service.middleware.linkage.framework.io.IOProtocol;
 import service.middleware.linkage.framework.io.WorkingChannelOperationResult;
 import service.middleware.linkage.framework.io.WorkingChannelStrategy;
 import service.middleware.linkage.framework.io.nio.NIOWorkingChannelContext;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnFileDataReceivedEvent;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnFileDataWriteEvent;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataReceivedEvent;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataWriteEvent;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.*;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.reader.*;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.writer.*;
-import service.middleware.linkage.framework.utils.ConvertUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.channels.Pipe;
 import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,9 +30,8 @@ import java.util.concurrent.Executors;
 public class NIOMixedStrategy extends WorkingChannelStrategy {
     // event distribution master
     private final EventDistributionMaster eventDistributionHandler;
+    // read buffer
     private StringBuffer readBuffer = new StringBuffer(10240);
-    // write file event queue
-    private Queue<ServiceOnFileDataWriteEvent> writeFileQueue = new ConcurrentLinkedQueue<ServiceOnFileDataWriteEvent>();
     // write message event queue
     private Queue<ServiceOnMessageDataWriteEvent> writeMessageQueue = new ConcurrentLinkedQueue<ServiceOnMessageDataWriteEvent>();
     private static Logger logger = LoggerFactory.getLogger(NIOMixedStrategy.class);
@@ -65,15 +53,6 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
         this.writeMessageQueue.offer(serviceOnMessageDataWriteEvent);
     }
 
-    /**
-     * offer write file event to the write queue
-     *
-     * @param serviceOnFileDataWriteEvent
-     */
-    public void offerFileWriteQueue(ServiceOnFileDataWriteEvent serviceOnFileDataWriteEvent) {
-        this.writeFileQueue.offer(serviceOnFileDataWriteEvent);
-    }
-
     private void readToBuffer(List<String> extractMessages) {
         synchronized (this.getWorkingChannelContext().getLinkageSocketChannel().getReadLock()) {
             try {
@@ -85,6 +64,7 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
                         readBytes = readBytes + ret;
                         if (ret < 0) {
                             this.getWorkingChannelContext().closeWorkingChannel();
+
                         }
                         if (!bb.hasRemaining()) {
                             break;
@@ -185,5 +165,12 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
      */
     public EventDistributionMaster getEventDistributionHandler() {
         return eventDistributionHandler;
+    }
+
+    @Override
+    public void closeStrategy() {
+        this.writeMessageQueue.clear();
+        this.writeMessageQueue = null;
+        this.readBuffer = null;
     }
 }

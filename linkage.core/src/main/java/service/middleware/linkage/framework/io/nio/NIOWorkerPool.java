@@ -70,7 +70,7 @@ public class NIOWorkerPool implements WorkerPool {
 	
 	public WorkingChannelContext register(SocketChannel sc, WorkingChannelMode workingChannelMode){
 		Worker worker = getNextWorker();
-		return worker.submitOpeRegister(new NIOWorkingChannelContext(sc, workingChannelMode, worker, this.eventDistributionHandler));
+		return worker.submitOpeRegister(new NIOWorkingChannelContext(sc, workingChannelMode, this.eventDistributionHandler));
 	}
 
 	@Override
