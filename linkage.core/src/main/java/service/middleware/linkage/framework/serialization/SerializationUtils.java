@@ -1,5 +1,6 @@
 package service.middleware.linkage.framework.serialization;
 
+import linkage.common.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -24,106 +25,23 @@ public class SerializationUtils {
 	 * @return
 	 */
 	public static String serializeRequest(ServiceRequest request) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("<request>");
-		sb.append("<requestid>");
-		sb.append(request.getRequestID());
-		sb.append("</requestid>");
-		sb.append("<serviceName>");
-		sb.append(escapeForXML(request.getServiceName()));
-		sb.append("</serviceName>");
-		sb.append("<methodName>");
-		sb.append(escapeForXML(request.getMethodName()));
-		sb.append("</methodName>");
-		sb.append("<version>");
-		sb.append(escapeForXML(request.getVersion()));
-		sb.append("</version>");
-		sb.append("<group>");
-		sb.append(escapeForXML(request.getGroup()));
-		sb.append("</group>");
-		sb.append("<list>");
-		if(request.getArgs() != null){
-			for (int i = 0; i < request.getArgs().size(); i++) {
-				sb.append("<arg>");
-				sb.append(escapeForXML(request.getArgs().get(i)));
-				sb.append("</arg>");
-			}
-		}
-		sb.append("</list>");
-		sb.append("</request>");
-		return sb.toString();
+		return JsonUtils.toJson(request);
 	}
 	
 	/**
 	 * deserialize request domain
-	 * @param request
 	 * @return
 	 */
 	public static ServiceRequest deserializeRequest(String receiveData) {
-		try {
-			InputStream is = new StringBufferInputStream(receiveData);
-			ServiceRequest request = new ServiceRequest();
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document document = db.parse(is);
-			NodeList childs = document.getChildNodes().item(0).getChildNodes(); 
-			for(int i = 0; i < childs.getLength(); i++){
-				Node node = childs.item(i);
-				if(node.getNodeName().equals("requestid")){
-					request.setRequestID(node.getTextContent());
-				}
-				else if(node.getNodeName().equals("serviceName")){
-					request.setServiceName(node.getTextContent());
-				}
-				else if(node.getNodeName().equals("methodName")){
-					request.setMethodName(node.getTextContent());
-				}
-				else  if(node.getNodeName().equals("version")){
-					request.setVersion(node.getTextContent());
-				}
-				else if(node.getNodeName().equals("group")){
-					request.setGroup(node.getTextContent());
-				}
-				else if(node.getNodeName().equals("list")){
-					NodeList childs1 = node.getChildNodes();
-					for(int j = 0; j < childs1.getLength(); j++){
-						Node listNode = childs1.item(j);
-						if(listNode.getNodeName().equals("arg")){
-							request.getArgs().add(listNode.getTextContent());
-						}
-					}
-				}
-			}
-			return request;
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		return null;
+		return JsonUtils.fromJson(receiveData, ServiceRequest.class);
 	}
 	
 	/**
 	 * serialize Response domain
-	 * @param request
 	 * @return
 	 */
 	public static String serializeResponse(ServiceResponse response) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("<response>");
-		sb.append("<requestid>");
-		sb.append(response.getRequestID());
-		sb.append("</requestid>");
-		sb.append("<result>");
-		sb.append(escapeForXML(response.getResult()));
-		sb.append("</result>");
-		sb.append("</response>");
-		return sb.toString();
+		return JsonUtils.toJson(response);
 	}
 	
 	/**
@@ -131,35 +49,7 @@ public class SerializationUtils {
 	 * @return
 	 */
 	public static ServiceResponse deserializeResponse(String receiveData) {
-		try {
-			logger.debug("received data : " + receiveData);
-			InputStream is = new StringBufferInputStream(receiveData);
-			ServiceResponse response = new ServiceResponse();
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document document = db.parse(is);
-			NodeList childs = document.getChildNodes().item(0).getChildNodes(); 
-			for(int i = 0; i < childs.getLength(); i++){
-				Node node = childs.item(i);
-				if(node.getNodeName().equals("result")){
-					response.setResult(node.getTextContent());
-				}
-				else if(node.getNodeName().equals("requestid")){
-					response.setRequestID(node.getTextContent());
-				}
-			}
-			return response;
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		return null;
+		return JsonUtils.fromJson(receiveData, ServiceResponse.class);
 	}
 	
 

@@ -15,6 +15,10 @@
     </parent>
     
 	<dependencies>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
 	</dependencies>
 	<build>
 		<finalName>${project.name}-${project.version}</finalName>
