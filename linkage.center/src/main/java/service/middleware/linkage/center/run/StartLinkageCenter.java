@@ -6,8 +6,6 @@ import service.middleware.linkage.framework.bootstrap.NIOMessageModeServerBootSt
 
 
 /**
- * <p>Title: ������</p>
- * @author starboy
  * @version 1.0
  */
 
