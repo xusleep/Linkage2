@@ -17,6 +17,7 @@
         <module>linkage.redis.learning</module>
         <module>linkage.spring.support</module>
         <module>linkage.test</module>
+        <module>linkage.utils</module>
         <module>linkage.web</module>
     </modules>
 

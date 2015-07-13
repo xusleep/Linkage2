@@ -1,5 +1,6 @@
 package service.middleware.linkage.framework.access.impl;
 
+import linkage.common.LocalIdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.middleware.linkage.framework.access.ServiceAccessEngine;
@@ -231,14 +232,13 @@ public class ServiceAccessEngineImpl implements ServiceAccessEngine {
      * @return
      */
     public ServiceRequest createRequestEntity(String clientID, List<String> args) {
-        UUID uuid = UUID.randomUUID();
         final ServiceRequest objRequestEntity = new ServiceRequest();
         ClientSettingEntity objServiceClientEntity = searchServiceClientEntity(clientID);
         objRequestEntity.setMethodName(objServiceClientEntity.getServiceMethod());
         objRequestEntity.setGroup(objServiceClientEntity.getServiceGroup());
         objRequestEntity.setServiceName(objServiceClientEntity.getServiceName());
         objRequestEntity.setArgs(args);
-        objRequestEntity.setRequestID(uuid.toString());
+        objRequestEntity.setRequestID(LocalIdGenerator.generateId());
         return objRequestEntity;
     }
 
