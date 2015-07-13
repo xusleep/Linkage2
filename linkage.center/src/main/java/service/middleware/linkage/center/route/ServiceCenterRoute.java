@@ -1,26 +1,23 @@
 package service.middleware.linkage.center.route;
 
-import static service.middleware.linkage.center.cache.ClientServiceInformationCache.addServiceInformationEntityList;
-import static service.middleware.linkage.center.cache.ClientServiceInformationCache.getServiceInformationEntityList;
-import static service.middleware.linkage.center.cache.ClientServiceInformationCache.removeServiceInformationEntity;
+import service.middleware.linkage.center.client.ServiceCenterClientUtils;
+import service.middleware.linkage.center.route.filters.RouteFilter;
+import service.middleware.linkage.framework.access.ServiceAccess;
+import service.middleware.linkage.framework.access.domain.ServiceInformation;
+import service.middleware.linkage.framework.access.domain.ServiceRequest;
+import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
+import service.middleware.linkage.framework.exception.ServiceException;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import service.middleware.linkage.center.client.ServiceCenterClientUtils;
-import service.middleware.linkage.center.common.ServiceCenterUtils;
-import service.middleware.linkage.center.route.filters.RouteFilter;
-import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.access.ServiceAccess;
-import service.middleware.linkage.framework.access.domain.ServiceRequest;
-import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
-import service.middleware.linkage.framework.access.domain.ServiceInformation;
+import static service.middleware.linkage.center.repository.ServiceInformationRepository.*;
 /**
  * This route is used for the service center
  * If will first access the service center, get the service list
  * then choose one service from the list.
- * If the service list exist in the cache, it will use it directly without access it again
+ * If the service list exist in the repository, it will use it directly without access it again
  * @author zhonxu
  *
  */
@@ -31,33 +28,43 @@ public class ServiceCenterRoute implements Route {
 	public ServiceCenterRoute(ServiceInformation centerServiceInformation, ServiceAccess consume){
 		this.centerServiceInformation = centerServiceInformation;
 		this.consume = consume;
+
 	}
+
+    /**
+     * 初始化服务列表
+     */
+    private void init(){
+
+    }
 
 	@Override
 	public ServiceInformation chooseRoute(ServiceRequest requestEntity) throws ServiceException {
-		// get it from the cache first, if not exist get it from the service center then
-		List<ServiceInformation> serviceList = getServiceInformationEntityList(requestEntity.getServiceName());
+		// get it from the repository first, if not exist get it from the service center then
+		List<ServiceInformation> serviceList = getServiceInformationList(requestEntity.getServiceName());
 		String result = null;
 		if(serviceList == null || serviceList.size() == 0)
 		{
 			synchronized(this){
-				serviceList = getServiceInformationEntityList(requestEntity.getServiceName());
+				serviceList = getServiceInformationList(requestEntity.getServiceName());
 				if(serviceList == null || serviceList.size() == 0)
 				{
-					List<String> list = new LinkedList<String>();
-					list.add(requestEntity.getServiceName());
-					// step 1, request the service center for the service list, 
+					List<Object> args = new LinkedList<Object>();
+					args.add(requestEntity.getServiceName());
+
+					List<Class<?>> argTypes = new LinkedList<>();
+					argTypes.add(String.class);
+					// step 1, request the service center for the service args,
 					//         then it will go to the step 2 to get the service center's address
-					ServiceRequestResult objServiceRequestResult = consume.requestServicePerConnectSync(ServiceCenterClientUtils.SERVICE_CENTER_GET_SERVICE_ID, list, centerServiceInformation);
+					ServiceRequestResult objServiceRequestResult = consume.requestServicePerConnectSync(ServiceCenterClientUtils.SERVICE_CENTER_GET_SERVICE_ID, args, argTypes, centerServiceInformation);
 					if(objServiceRequestResult.isException())
 					{
 						throw objServiceRequestResult.getException();
 					}
 					else
 					{
-						result = objServiceRequestResult.getResponseEntity().getResult();
-						serviceList = ServiceCenterUtils.deserializeServiceInformationList(result);
-						addServiceInformationEntityList(serviceList);
+						serviceList = (List<ServiceInformation>)objServiceRequestResult.getResponseEntity().getResult();
+						addServiceInformationList(serviceList);
 					}
 				}
 			}
@@ -94,6 +101,6 @@ public class ServiceCenterRoute implements Route {
 	@Override
 	public void clean(ServiceRequestResult objServiceRequestResult) {
 		// TODO Auto-generated method stub
-		removeServiceInformationEntity(objServiceRequestResult.getServiceInformation());
+		removeServiceInformation(objServiceRequestResult.getServiceInformation());
 	}
 }

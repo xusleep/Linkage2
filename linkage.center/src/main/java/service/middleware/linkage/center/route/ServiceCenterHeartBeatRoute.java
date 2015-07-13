@@ -18,7 +18,7 @@ package service.middleware.linkage.center.route;
 // * This route is used for the service center
 // * If will first access the service center, get the service list
 // * then choose one service from the list.
-// * If the service list exist in the cache, it will use it directly without access it again
+// * If the service list exist in the repository, it will use it directly without access it again
 // * @author zhonxu
 // *
 // */

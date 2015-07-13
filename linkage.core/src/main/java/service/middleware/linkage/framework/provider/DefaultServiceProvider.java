@@ -47,19 +47,25 @@ public class DefaultServiceProvider implements ServiceProvider{
 		}
 		try {
 			Class clazz = Class.forName(entity.getServiceInterface());
-			Method[] methods = clazz.getMethods();
 			Method findMethod = null;
-			for(Method method : methods){
-				if(method.getName().equals(request.getMethodName())){
-					findMethod = method;
-					break;
-				}
+			if(request.getArgsTyps() != null) {
+				findMethod = clazz.getMethod(request.getMethodName(), (Class<?>[]) request.getArgsTyps().toArray());
+			}
+			else
+			{
+				findMethod = clazz.getMethod(request.getMethodName(), null);
 			}
 			if(findMethod != null)
 			{
-				Object result = findMethod.invoke(entity.getServiceTargetObject(), request.getArgs().toArray());
+				Object result = null;
+				if(request.getArgs() != null) {
+					result = findMethod.invoke(entity.getServiceTargetObject(), request.getArgs().toArray());
+				}
+				else{
+					result = findMethod.invoke(entity.getServiceTargetObject(), null);
+				}
 				ServiceResponse response = new ServiceResponse();
-				response.setResult(result.toString());
+				response.setResult(result);
 				response.setRequestID(request.getRequestID());
 				return response;
 			}

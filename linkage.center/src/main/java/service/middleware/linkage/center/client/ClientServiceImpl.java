@@ -1,7 +1,7 @@
 package service.middleware.linkage.center.client;
 
-import static service.middleware.linkage.center.cache.ClientServiceInformationCache.addServiceInformationEntityList;
-import static service.middleware.linkage.center.cache.ClientServiceInformationCache.removeServiceInformationEntityList;
+import static service.middleware.linkage.center.repository.ServiceInformationRepository.addServiceInformationList;
+import static service.middleware.linkage.center.repository.ServiceInformationRepository.removeServiceInformationList;
 
 import java.util.List;
 
@@ -20,14 +20,14 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	public String removeService(String serviceInfor) {
 		List<ServiceInformation> objServiceInformationList = ServiceCenterUtils.deserializeServiceInformationList(serviceInfor);
-		removeServiceInformationEntityList(objServiceInformationList);
+		removeServiceInformationList(objServiceInformationList);
 		return null;
 	}
 
 	@Override
 	public String addService(String serviceInfor) {
 		List<ServiceInformation> objServiceInformationList = ServiceCenterUtils.deserializeServiceInformationList(serviceInfor);
-		addServiceInformationEntityList(objServiceInformationList);
+		addServiceInformationList(objServiceInformationList);
 		return "true";
 	}
 }

@@ -24,7 +24,7 @@ public class SerializeUtilsTest {
 		request.setGroup("testGroup");
 		request.setRequestID("10000");
 		request.setVersion("@@!#$test.1.0");
-		List<String> args = new LinkedList<String>();
+		List<Object> args = new LinkedList<Object>();
 		args.add("arg1");
 		args.add("arg2&*^%");
 		args.add("arg3");

@@ -25,14 +25,14 @@ public class NIORouteServiceAccess extends ServiceAccessImpl implements RouteSer
 	}
 	
 	@Override
-	public ServiceRequestResult requestService(String clientID, List<String> args) {
-		return requestService(clientID, args, true);
+	public ServiceRequestResult requestService(String clientID, List<Object> args, List<Class<?>> argTypes) {
+		return requestService(clientID, args, argTypes, true);
 	}
 
 	@Override
 	public ServiceRequestResult requestService(String clientID,
-			List<String> args, boolean channelFromCached) {
-		final ServiceRequest objRequestEntity = serviceEngine.createRequestEntity(clientID, args);
+			List<Object> args, List<Class<?>> argTypes, boolean channelFromCached) {
+		final ServiceRequest objRequestEntity = serviceEngine.createRequestEntity(clientID, args, argTypes);
         ServiceRequestResult result = new ServiceRequestResult();
         result.setRequestID(objRequestEntity.getRequestID());
     	// Find the service information from the route, set the information into the result domain as well
@@ -61,14 +61,14 @@ public class NIORouteServiceAccess extends ServiceAccessImpl implements RouteSer
 
 	@Override
 	public ServiceRequestResult requestServicePerConnect(String clientID,
-			List<String> args) {
-		return requestService(clientID, args, false);
+			List<Object> args, List<Class<?>> argTypes) {
+		return requestService(clientID, args, argTypes, false);
 	}
 
 	@Override
 	public ServiceRequestResult requestServicePerConnectSync(String clientID,
-			List<String> args) {
-		ServiceRequestResult result = requestService(clientID, args, false);
+			List<Object> args, List<Class<?>> argTypes) {
+		ServiceRequestResult result = requestService(clientID, args, argTypes, false);
 		result.getResponseEntity();
 		this.closeChannelByRequestResult(result);
 		return result;

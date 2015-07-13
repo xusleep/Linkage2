@@ -7,13 +7,13 @@ package service.middleware.linkage.framework.access.domain;
  */
 public class ServiceResponse {
 	private String requestID;
-	private String result;
+	private Object result;
 
-	public String getResult() {
+	public Object getResult() {
 		return result;
 	}
 
-	public void setResult(String result) {
+	public void setResult(Object result) {
 		this.result = result;
 	}
 

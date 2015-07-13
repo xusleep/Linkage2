@@ -1,6 +1,7 @@
 package service.middleware.linkage.framework.access;
 
 import java.util.List;
+import java.util.Map;
 
 import service.middleware.linkage.framework.access.domain.ServiceInformation;
 import service.middleware.linkage.framework.access.domain.ServiceRequest;
@@ -28,7 +29,7 @@ public interface ServiceAccessEngine {
 	 * @param args
 	 * @return
 	 */
-	public ServiceRequest createRequestEntity(String clientID, List<String> args);
+	public ServiceRequest createRequestEntity(String clientID, List<Object> args, List<Class<?>> argTypes);
 	
 	/**
 	 * close the channel by request result
@@ -39,7 +40,7 @@ public interface ServiceAccessEngine {
 	 */
 	public void closeChannelByRequestResult(ServiceRequestResult objServiceRequestResult);
 	/**
-	 * remove the channel from the cache
+	 * remove the channel from the repository
 	 */
 	public void removeCachedChannel(WorkingChannelContext objWorkingChannel);
 	/**

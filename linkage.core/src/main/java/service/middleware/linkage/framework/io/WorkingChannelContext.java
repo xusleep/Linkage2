@@ -15,4 +15,5 @@ public interface WorkingChannelContext extends WorkingChannelReadWrite {
 	public void closeWorkingChannel();
 	public WorkingChannelMode getWorkingChannelMode();
 	public WorkingChannelStrategy getWorkingChannelStrategy();
+	public String getId();
 }

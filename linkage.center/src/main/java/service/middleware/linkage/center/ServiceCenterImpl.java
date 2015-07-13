@@ -14,8 +14,9 @@ import service.middleware.linkage.framework.exception.ServiceException;
  *
  */
 public class ServiceCenterImpl implements ServiceCenter {
+
 	@Override
-	public String register(String serviceInfor) {
+	public Boolean register(String serviceInfor) {
 		// TODO Auto-generated method stub
 		List<ServiceInformation> objServiceInformation = ServiceCenterUtils.deserializeServiceInformationList(serviceInfor);
 		synchronized(ServiceCenter.serviceInformationList)
@@ -32,20 +33,20 @@ public class ServiceCenterImpl implements ServiceCenter {
 			}
 		}
 		System.out.println("register service count = " + ServiceCenter.serviceInformationList.size());
-		return "true";
+		return true;
 	}
 	
 	@Override
-	public String registerClientList(String serviceInfor) { 
+	public Boolean registerClientList(String serviceInfor) {
 		ServiceInformation objServiceInformation = ServiceCenterUtils.deserializeServiceInformation(serviceInfor);
 		ServiceCenter.serviceClientList.add(objServiceInformation);
 		System.out.println("serviceInfor = " + serviceInfor);
 		System.out.println("service client count = " + ServiceCenter.serviceInformationList.size());
-		return "true";
+		return true;
 	}
 
 	@Override
-	public String getServiceList(String serviceName) {
+	public List<ServiceInformation> getServiceList(String serviceName) {
 		List<ServiceInformation> resultList = new LinkedList<ServiceInformation>();
 		for(ServiceInformation objServiceInformation : ServiceCenter.serviceInformationList){
 			if(objServiceInformation.getServiceName().equals(serviceName))
@@ -53,12 +54,12 @@ public class ServiceCenterImpl implements ServiceCenter {
 				resultList.add(objServiceInformation);
 			}
 		}
-		return ServiceCenterUtils.serializeServiceInformationList(resultList);
+		return resultList;
 	}
 	/**
 	 * ɾ�������б�
 	 */
-	public String removeServiceList(String serviceName){
+	public Boolean removeServiceList(String serviceName){
 		List<ServiceInformation> resultList = new LinkedList<ServiceInformation>();
 		synchronized(ServiceCenter.serviceInformationList)
 		{
@@ -70,7 +71,7 @@ public class ServiceCenterImpl implements ServiceCenter {
 			}
 			ServiceCenter.serviceInformationList.removeAll(resultList);
 		}
-		return "true";
+		return true;
 	}
 
 }

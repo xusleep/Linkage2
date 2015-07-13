@@ -39,9 +39,12 @@ public class HeartBeatSender implements Runnable {
 				for(ServiceInformation objServiceInformation : ServiceCenter.serviceInformationList)
 				{
 					// TODO Auto-generated method stub
-					List<String> args = new LinkedList<String>();
+					List<Object> args = new LinkedList<Object>();
 					args.add(ShareingData.HEART_BEAT_SEND);
-					ServiceRequestResult result = this.consume.requestServicePerConnectSync(ShareingData.HEART_BEAT_CLIENT_ID, args, objServiceInformation);
+					List<Class<?>> argTypes = new LinkedList<>();
+					argTypes.add(String.class);
+					args.add(ShareingData.HEART_BEAT_SEND);
+					ServiceRequestResult result = this.consume.requestServicePerConnectSync(ShareingData.HEART_BEAT_CLIENT_ID, args, argTypes, objServiceInformation);
 					if(ShareingData.HEART_BEAT_REPLY.equals(result.getResponseEntity().getResult())){
 						logger.debug("service :" + objServiceInformation.toString() + " is available");
 					}

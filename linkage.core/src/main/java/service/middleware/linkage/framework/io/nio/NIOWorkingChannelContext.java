@@ -21,7 +21,7 @@ import java.nio.channels.SocketChannel;
  */
 public class NIOWorkingChannelContext implements WorkingChannelContext {
     private final LinkageSocketChannel channel;
-    private String workingChannelCacheID;
+    private String id;
     private SelectionKey key;
     private volatile WorkingChannelMode workingMode;
     private WorkingChannelStrategy workingChannelStrategy;
@@ -75,12 +75,12 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
         return channel;
     }
 
-    public String getWoringChannelCacheID() {
-        return workingChannelCacheID;
+    public String getId() {
+        return id;
     }
 
-    public void setWorkingChannelCacheID(String workingChannelCacheID) {
-        this.workingChannelCacheID = workingChannelCacheID;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public WorkingChannelMode getWorkingChannelMode() {

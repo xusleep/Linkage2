@@ -41,15 +41,16 @@ public final class ServiceCenterClientUtils {
 	
 	/**
 	 * invoke the client service method
-	 * @param clientID
 	 * @param serviceInformationList
 	 * @throws ServiceException 
 	 */
 	public static boolean notifyClientServiceAdd(ServiceAccess consume, ServiceInformation clientServiceInformation, List<ServiceInformation> serviceInformationList ) throws ServiceException{
 		String strServiceInformation = ServiceCenterUtils.serializeServiceInformationList(serviceInformationList);
-		List<String> args = new LinkedList<String>();
+		List<Object> args = new LinkedList<Object>();
 		args.add(strServiceInformation);
-		ServiceRequestResult result = consume.requestServicePerConnectSync(SERVICE_CENTER_CLIENT_SERVICE_ADD, args, clientServiceInformation);
+		List<Class<?>> argTypes = new LinkedList<>();
+		argTypes.add(String.class);
+		ServiceRequestResult result = consume.requestServicePerConnectSync(SERVICE_CENTER_CLIENT_SERVICE_ADD, args, argTypes, clientServiceInformation);
 		if(result.isException()){
 			result.getException().printStackTrace();
 			throw result.getException();
@@ -69,9 +70,11 @@ public final class ServiceCenterClientUtils {
 	public static boolean registerClientInformation(ServiceAccess consume, ServiceInformation centerServiceInformation,
 			ServiceInformation clientServiceInformation) throws ServiceException{
 		String strServiceInformation = ServiceCenterUtils.serializeServiceInformation(clientServiceInformation);
-		List<String> args = new LinkedList<String>();
+		List<Object> args = new LinkedList<Object>();
 		args.add(strServiceInformation);
-		ServiceRequestResult result = consume.requestServicePerConnectSync(SERVICE_CENTER_REGISTER_CLIENT_ID, args, centerServiceInformation);
+		List<Class<?>> argTypes = new LinkedList<>();
+		argTypes.add(String.class);
+		ServiceRequestResult result = consume.requestServicePerConnectSync(SERVICE_CENTER_REGISTER_CLIENT_ID, args, argTypes, centerServiceInformation);
 		if(result.isException()){
 			result.getException().printStackTrace();
 			throw result.getException();
@@ -81,7 +84,6 @@ public final class ServiceCenterClientUtils {
 	
 	/**
 	 * this method is used to register the service to service center
-	 * @param consumerBean
 	 * @param workingServicePropertyEntity
 	 * @return
 	 * @throws ServiceException
@@ -113,9 +115,11 @@ public final class ServiceCenterClientUtils {
 			
 		}
 		String strServiceInformation = ServiceCenterUtils.serializeServiceInformationList(serviceInformationList);
-		List<String> args = new LinkedList<String>();
+		List<Object> args = new LinkedList<>();
 		args.add(strServiceInformation);
-		ServiceRequestResult result = consume.requestServicePerConnectSync(ServiceCenterClientUtils.SERVICE_CENTER_REGISTER_ID, args, centerServiceInformation);
+		List<Class<?>> argTypes = new LinkedList<>();
+		argTypes.add(String.class);
+		ServiceRequestResult result = consume.requestServicePerConnectSync(ServiceCenterClientUtils.SERVICE_CENTER_REGISTER_ID, args, argTypes, centerServiceInformation);
 		if(result.isException()){
 			result.getException().printStackTrace();
 			throw result.getException();

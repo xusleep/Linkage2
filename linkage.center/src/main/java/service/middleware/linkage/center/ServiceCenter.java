@@ -8,8 +8,8 @@ import service.middleware.linkage.framework.access.domain.ServiceInformation;
 public interface ServiceCenter {
 	public static final List<ServiceInformation> serviceInformationList = new LinkedList<ServiceInformation>();
 	public static final List<ServiceInformation> serviceClientList = new LinkedList<ServiceInformation>();
-	public String register(String serviceInfor);
-	public String registerClientList(String serviceInfor);
-	public String getServiceList(String servicename);
-	public String removeServiceList(String serviceName);
+	public Boolean register(String serviceInfor);
+	public Boolean registerClientList(String serviceInfor);
+	public List<ServiceInformation> getServiceList(String servicename);
+	public Boolean removeServiceList(String serviceName);
 }

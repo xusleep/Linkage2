@@ -11,7 +11,7 @@ public interface RouteServiceAccess {
 	 * @param args
 	 * @return
 	 */
-	public ServiceRequestResult requestService(String clientID, List<String> args);
+	public ServiceRequestResult requestService(String clientID, List<Object> args, List<Class<?>> argTypes);
 	
 	/**
 	 * request directly using the service information domain
@@ -20,18 +20,19 @@ public interface RouteServiceAccess {
 	 * @param channelFromCached
 	 * @return
 	 */
-	public ServiceRequestResult requestService(String clientID, List<String> args, boolean channelFromCached);
+	public ServiceRequestResult requestService(String clientID,
+											   List<Object> args, List<Class<?>> argTypes, boolean channelFromCached);
 	
 	/**
 	 * send the request from the client to request a service
-	 * this request will not reuse the cache connect
+	 * this request will not reuse the repository connect
 	 * use this method with closeChannelByRequestResult
 	 * @param clientID the id set in property
 	 * @param args  the arguments for the service
 	 * @return
 	 * @throws Exception
 	 */
-	public ServiceRequestResult requestServicePerConnect(String clientID, List<String> args);
+	public ServiceRequestResult requestServicePerConnect(String clientID, List<Object> args, List<Class<?>> argTypes);
 
 	/**
 	 * send the request from the client to request a service synchronized
@@ -42,6 +43,6 @@ public interface RouteServiceAccess {
 	 * @return
 	 * @throws Exception
 	 */
-	public ServiceRequestResult requestServicePerConnectSync(String clientID, List<String> args);
+	public ServiceRequestResult requestServicePerConnectSync(String clientID, List<Object> args, List<Class<?>> argTypes);
 	
 }

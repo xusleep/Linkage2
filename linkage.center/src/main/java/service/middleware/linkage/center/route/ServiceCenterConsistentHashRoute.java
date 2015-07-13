@@ -21,9 +21,9 @@ package service.middleware.linkage.center.route;
 // * This route is used for the service center
 // * If will first access the service center, get the service list
 // * then choose one service from the list.
-// * If the service list exist in the cache, it will use it directly without access it again
+// * If the service list exist in the repository, it will use it directly without access it again
 // * 
-// * this route can be used in the cache list get
+// * this route can be used in the repository list get
 // * all of the caches can register their information in the service center
 // * by using this route, we could get the service list then create a consisten hash circle
 // * we could get the service from the circle by using the object hash value
@@ -39,7 +39,7 @@ package service.middleware.linkage.center.route;
 //
 //	@Override
 //	public ServiceInformation chooseRoute(ServiceRequest requestEntity, ConsumerBean serviceCenterConsumerBean) throws ServiceException {
-//		// get it from the cache first, if not exist get it from the service center then
+//		// get it from the repository first, if not exist get it from the service center then
 //		ConsistentHash<?> consistentHash = serviceListCache.get(requestEntity.getServiceName());
 //		String result = null;
 //		if(consistentHash == null)
