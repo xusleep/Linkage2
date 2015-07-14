@@ -18,15 +18,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Smile
  *
  */
-public class StartClient extends AbstractJob {
+public class StartClientMoreConnection extends AbstractJob {
 	public static final AtomicInteger aint = new AtomicInteger(2320);
 	private final AtomicBoolean isFailed = new AtomicBoolean(false);
 	public static final AtomicInteger successCount = new AtomicInteger(0);
 	public static final AtomicInteger requestCount = new AtomicInteger(0);
-	private ServiceAccess cb;
 
-	public StartClient(ServiceAccess cb) {
-		this.cb = cb;
+	public StartClientMoreConnection() {
+
 	}
 
 	@Override
@@ -37,6 +36,9 @@ public class StartClient extends AbstractJob {
 
 	@Override
 	public void doConcurrentJob() {
+		NIOClientBootStrap clientBootStrap = new NIOClientBootStrap("localhost", 5003, "conf/client_client.properties", 5);
+		clientBootStrap.run();
+		ServiceAccess cb = clientBootStrap.getServiceAccess();
 		for(long i = 0; i < 99999999; i++)
 		{
 			//System.out.println("request count ..." + requestCount.incrementAndGet());
@@ -66,10 +68,7 @@ public class StartClient extends AbstractJob {
 	}
 
 	public static void main(String[] args) throws IOException {
-		NIOClientBootStrap clientBootStrap = new NIOClientBootStrap("localhost", 5003, "conf/client_client.properties", 5);
-		clientBootStrap.run();
-		ServiceAccess cb = clientBootStrap.getServiceAccess();
-		StartClient job1 = new StartClient(cb);
+		StartClientMoreConnection job1 = new StartClientMoreConnection();
 		job1.setThreadCount(50);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();
 		jobList.add(job1);

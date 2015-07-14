@@ -57,38 +57,37 @@ public class NIOMessageStrategy extends WorkingChannelStrategy {
         synchronized (this.getWorkingChannelContext().getLinkageSocketChannel().getReadLock()) {
             try {
                 SocketChannel sc = this.getWorkingChannelContext().getLinkageSocketChannel().getSocketChannel();
-                    int readBytes = 0;
-                    int ret = 0;
-                    ByteBuffer bb = ByteBuffer.allocate(IOProtocol.BUFFER_SIZE);
-                    while ((ret = sc.read(bb)) > 0) {
-                        readBytes = readBytes + ret;
-                        if (ret < 0) {
-                            this.getWorkingChannelContext().closeWorkingChannel();
-
-                        }
-                        if (!bb.hasRemaining()) {
-                            break;
-                        }
-                    }
-                    if (ret < 0 ) {
+                int readBytes = 0;
+                int ret = 0;
+                ByteBuffer bb = ByteBuffer.allocate(IOProtocol.BUFFER_SIZE);
+                while ((ret = sc.read(bb)) > 0) {
+                    readBytes = readBytes + ret;
+                    if (ret < 0) {
                         this.getWorkingChannelContext().closeWorkingChannel();
+
                     }
-                    if (readBytes > 0) {
-                        bb.flip();
+                    if (!bb.hasRemaining()) {
+                        break;
                     }
-                    logger.debug("total readCount = " + readBytes);
-                    byte[] message = new byte[readBytes];
-                    System.arraycopy(bb.array(), 0, message, 0, readBytes);
-                    String receiveString = new String(message, IOProtocol.FRAMEWORK_IO_ENCODING);
-                    this.readBuffer.append(receiveString);
-                    String unwrappedMessage = "";
-                    try {
-                        while ((unwrappedMessage = IOProtocol.extractMessage(this.readBuffer)) != "") {
-                            extractMessages.add(unwrappedMessage);
-                        }
-                    } catch (Exception e) {
-                        logger.error(e.getMessage(), e);
+                }
+                if (ret < 0) {
+                    this.getWorkingChannelContext().closeWorkingChannel();
+                }
+                if (readBytes > 0) {
+                    bb.flip();
+                }
+                byte[] message = new byte[readBytes];
+                System.arraycopy(bb.array(), 0, message, 0, readBytes);
+                String receiveString = new String(message, IOProtocol.FRAMEWORK_IO_ENCODING);
+                this.readBuffer.append(receiveString);
+                String unwrappedMessage = "";
+                try {
+                    while ((unwrappedMessage = IOProtocol.extractMessage(this.readBuffer)) != "") {
+                        extractMessages.add(unwrappedMessage);
                     }
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
+                }
             } catch (Exception ex) {
                 logger.error(ex.getMessage(), ex);
                 this.getWorkingChannelContext().closeWorkingChannel();
@@ -121,8 +120,9 @@ public class NIOMessageStrategy extends WorkingChannelStrategy {
             if ((messageEvent = writeMessageQueue.poll()) == null) {
                 break;
             }
-            if(this.getWorkingChannelContext().getLinkageSocketChannel().isOpen()) {
-                synchronized (this.getWorkingChannelContext().getLinkageSocketChannel().getReadLock()) {
+
+            synchronized (this.getWorkingChannelContext().getLinkageSocketChannel().getWriteLock()) {
+                if (this.getWorkingChannelContext().getLinkageSocketChannel().isOpen()) {
                     SocketChannel sc = this.getWorkingChannelContext().getLinkageSocketChannel().getSocketChannel();
                     byte[] data = null;
                     try {
@@ -140,20 +140,16 @@ public class NIOMessageStrategy extends WorkingChannelStrategy {
                             while (buffer.hasRemaining()) {
                                 sc.write(buffer);
                             }
-                            logger.debug("writed all the message : " + IOProtocol.wrapMessage(messageEvent.getMessageData()) + " length: " + IOProtocol.wrapMessage(messageEvent.getMessageData()).length());
-                            logger.debug("writed total count : " + data.length);
                         } catch (IOException e) {
                             logger.error(e.getMessage(), e);
                             this.getWorkingChannelContext().closeWorkingChannel();
                         }
                     }
+                } else {
+                    logger.error("the channel is closed, exit the writting.");
+                    break;
                 }
             }
-            else{
-                logger.error("the channel is closed, exit the writting.");
-                break;
-            }
-
         }
         return new WorkingChannelOperationResult(true);
     }
