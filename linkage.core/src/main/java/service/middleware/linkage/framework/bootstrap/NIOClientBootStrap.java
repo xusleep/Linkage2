@@ -8,6 +8,11 @@ import service.middleware.linkage.framework.io.Client;
 import service.middleware.linkage.framework.io.nio.NIOClient;
 import service.middleware.linkage.framework.access.ServiceAccess;
 import service.middleware.linkage.framework.access.impl.ServiceAccessImpl;
+import service.middleware.linkage.framework.io.nio.NIOWorkingChannelContext;
+import service.middleware.linkage.framework.io.nio.connection.NIOConnectionManager;
+import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
+import service.middleware.linkage.framework.repository.WorkingChannelRepository;
+import service.middleware.linkage.framework.repository.domain.WorkingChannelStoreBean;
 import service.middleware.linkage.framework.setting.reader.ClientSettingPropertyReader;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
 
@@ -17,7 +22,7 @@ import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
  * @author zhonxu
  *
  */
-public class NIOMessageModeClientBootStrap extends AbstractBootStrap implements Runnable {
+public class NIOClientBootStrap extends AbstractBootStrap implements Runnable {
 	private final Client client;
 	private final ServiceAccess serviceAccess;
 	
@@ -26,7 +31,7 @@ public class NIOMessageModeClientBootStrap extends AbstractBootStrap implements 
 	 * @param propertyPath the property configured for the client
 	 * @param clientTaskThreadPootSize the client 
 	 */
-	public NIOMessageModeClientBootStrap(String propertyPath, int clientTaskThreadPootSize){
+	public NIOClientBootStrap(String serviceAddress, int servicePort, String propertyPath, int clientTaskThreadPootSize){
 		super(new DefaultEventDistributionMaster(clientTaskThreadPootSize));
 		// read the configuration from the properties
 		ClientSettingReader objServicePropertyEntity = null;
@@ -39,6 +44,13 @@ public class NIOMessageModeClientBootStrap extends AbstractBootStrap implements 
 		this.client = new NIOClient(this.getWorkerPool());
 		this.serviceAccess = new ServiceAccessImpl(objServicePropertyEntity);
 		this.getWorkerPool().getEventDistributionHandler().addHandler(new AccessClientHandler());
+
+		try {
+			NIOWorkingChannelContext nioWorkingChannelContext = NIOConnectionManager.createNIOWorkingChannel(serviceAddress, servicePort, WorkingChannelMode.MESSAGE, this.getWorkerPool());
+			WorkingChannelRepository.addWorkingChannelStoreBean(new WorkingChannelStoreBean(nioWorkingChannelContext));
+		}catch (Exception ex){
+			ex.printStackTrace();
+		}
 	}
 	
 	/**

@@ -14,12 +14,12 @@ import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
  * @author zhonxu
  *
  */
-public class NIOMessageModeServerBootStrap extends AbstractBootStrap implements Runnable {
+public class NIOServerBootStrap extends AbstractBootStrap implements Runnable {
 	private final Server server;
 	private final ServiceProvider serviceProvider;
 	private final ServiceSettingReader servicePropertyEntity;
 	
-	public NIOMessageModeServerBootStrap(String propertyPath, int serviceTaskThreadPootSize) throws Exception{
+	public NIOServerBootStrap(String propertyPath, int serviceTaskThreadPootSize) throws Exception{
 		super(new DefaultEventDistributionMaster(serviceTaskThreadPootSize));
 		// read the configuration from the properties
 		this.servicePropertyEntity = new ServiceSettingPropertyReader(propertyPath);

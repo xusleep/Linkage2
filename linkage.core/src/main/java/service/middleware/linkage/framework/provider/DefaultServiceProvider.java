@@ -8,6 +8,8 @@ import service.middleware.linkage.framework.setting.ServiceSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
 
 import java.lang.reflect.Method;
+import java.util.LinkedList;
+import java.util.List;
 
 public class DefaultServiceProvider implements ServiceProvider{
 	private final ServiceSettingReader servicePropertyEntity;
@@ -47,13 +49,12 @@ public class DefaultServiceProvider implements ServiceProvider{
 		try {
 			Class clazz = Class.forName(entity.getServiceInterface());
 			Method findMethod = null;
-			if(request.getArgsTyps() != null) {
-				findMethod = clazz.getMethod(request.getMethodName(), (Class<?>[]) request.getArgsTyps().toArray());
+			Class<?>[] argsTypes = new Class<?>[request.getArgs().size()];
+			for(int i =0; i < request.getArgs().size(); i++){
+				argsTypes[i] = request.getArgs().get(i).getClass();
 			}
-			else
-			{
-				findMethod = clazz.getMethod(request.getMethodName(), null);
-			}
+			findMethod = clazz.getMethod(request.getMethodName(), argsTypes);
+
 			if(findMethod != null)
 			{
 				Object result = null;

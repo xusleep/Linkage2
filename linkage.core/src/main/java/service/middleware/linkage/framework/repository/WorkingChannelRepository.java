@@ -88,7 +88,7 @@ public class WorkingChannelRepository {
             try {
                 SocketChannel socketChannel = workingChannelStoreBean.getWorkingChannelContext().getLinkageSocketChannel().getSocketChannel();
                 InetSocketAddress socketAddress = (InetSocketAddress)socketChannel.getRemoteAddress();
-                String key = socketAddress.getAddress() + "_" + socketAddress.getPort();
+                String key = socketAddress.getHostString() + "_" + socketAddress.getPort();
                 if (StringUtils.equals(key, netKey)) {
                     workingChannelStoreBeans.add(workingChannelStoreBean);
                 }

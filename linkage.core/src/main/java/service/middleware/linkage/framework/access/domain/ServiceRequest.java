@@ -15,7 +15,6 @@ public class ServiceRequest {
     private String version;
     private final String requestID;
     private List<Object> args;
-    private List<Class<?>> argsTyps;
     private String group;
 
     public ServiceRequest() {
@@ -56,14 +55,6 @@ public class ServiceRequest {
 
     public void setArgs(List<Object> args) {
         this.args = args;
-    }
-
-    public List<Class<?>> getArgsTyps() {
-        return argsTyps;
-    }
-
-    public void setArgsTyps(List<Class<?>> argsTyps) {
-        this.argsTyps = argsTyps;
     }
 
     public String getGroup() {

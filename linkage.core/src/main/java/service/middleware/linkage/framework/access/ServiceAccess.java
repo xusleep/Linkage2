@@ -13,9 +13,8 @@ public interface ServiceAccess {
 	 * @param port
 	 * @param clientID
 	 * @param args
-	 * @param argType
 	 * @param requestCallback
 	 */
-	public void requestService(String address, int port, String clientID, List<Object> args, List<Class<?>> argType,
+	public void requestService(String address, int port, String clientID, List<Object> args,
 							   RequestCallback requestCallback);
 }

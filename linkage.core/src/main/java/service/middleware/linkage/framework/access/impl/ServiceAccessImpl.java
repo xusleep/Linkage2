@@ -60,13 +60,12 @@ public class ServiceAccessImpl implements ServiceAccess {
      * @param port
      * @param clientID
      * @param args
-     * @param argType
      * @param requestCallback
      */
     @Override
-    public void requestService(String address, int port, String clientID, List<Object> args, List<Class<?>> argType,
+    public void requestService(String address, int port, String clientID, List<Object> args,
                                RequestCallback requestCallback) {
-        ServiceRequest objRequestEntity = this.createRequestEntity(clientID, args, argType);
+        ServiceRequest objRequestEntity = this.createRequestEntity(clientID, args);
         WorkingChannelStoreBean workingChannelStoreBean = null;
         NIOWorkingChannelContext workingChannel = null;
         NIOMessageStrategy strategy = null;
@@ -93,14 +92,13 @@ public class ServiceAccessImpl implements ServiceAccess {
      * @param args
      * @return
      */
-    public ServiceRequest createRequestEntity(String clientID, List<Object> args, List<Class<?>> argTypes) {
+    public ServiceRequest createRequestEntity(String clientID, List<Object> args) {
         final ServiceRequest objRequestEntity = new ServiceRequest();
         ClientSettingEntity objServiceClientEntity = searchServiceClientEntity(clientID);
         objRequestEntity.setMethodName(objServiceClientEntity.getServiceMethod());
         objRequestEntity.setGroup(objServiceClientEntity.getServiceGroup());
         objRequestEntity.setServiceName(objServiceClientEntity.getServiceName());
         objRequestEntity.setArgs(args);
-        objRequestEntity.setArgsTyps(argTypes);
         objRequestEntity.setVersion(objServiceClientEntity.getServiceVersion());
         return objRequestEntity;
     }

@@ -21,7 +21,7 @@ public class NIOConnectionManager {
      * @throws IOException
      * @throws ServiceException
      */
-    public static NIOWorkingChannelContext createNIOWorkingChannel(String address, int port, WorkingChannelMode workingChannelMode, WorkerPool workerPool) throws IOException, ServiceException {
+    public static NIOWorkingChannelContext createNIOWorkingChannel(String address, int port, WorkingChannelMode workingChannelMode, WorkerPool workerPool) throws IOException {
         SocketChannel channel = createNIOConnection(address, port);
         NIOWorkingChannelContext objWorkingChannel = (NIOWorkingChannelContext) workerPool.register(channel, workingChannelMode);
         return objWorkingChannel;

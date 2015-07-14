@@ -17,8 +17,14 @@ public class DefaultRoute implements Route {
     @Override
     public WorkingChannelStoreBean chooseRoute(String address, int port) {
         List<WorkingChannelStoreBean> workingChannelStoreBeans = WorkingChannelRepository.getWorkingChannelStoreBeansByNetKey(CommonUtils.getNetKey(address, port));
-        Random r = new Random();
-        WorkingChannelStoreBean workingChannelStoreBean = workingChannelStoreBeans.get(r.nextInt(workingChannelStoreBeans.size()));
-        return workingChannelStoreBean;
+        if(workingChannelStoreBeans.size() > 0) {
+            Random r = new Random();
+            WorkingChannelStoreBean workingChannelStoreBean = workingChannelStoreBeans.get(r.nextInt(workingChannelStoreBeans.size()));
+            return workingChannelStoreBean;
+        }
+        else
+        {
+            return null;
+        }
     }
 }
