@@ -15,6 +15,7 @@ import service.middleware.linkage.framework.serialization.SerializationUtils;
 import service.middleware.linkage.framework.setting.ClientSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -99,6 +100,11 @@ public class ServiceAccessImpl implements ServiceAccess {
         objRequestEntity.setGroup(objServiceClientEntity.getServiceGroup());
         objRequestEntity.setServiceName(objServiceClientEntity.getServiceName());
         objRequestEntity.setArgs(args);
+        List<String> argTypes = new LinkedList<>();
+        for(Object o : args){
+            argTypes.add(o.getClass().toString());
+        }
+        objRequestEntity.setArgTypes(argTypes);
         objRequestEntity.setVersion(objServiceClientEntity.getServiceVersion());
         return objRequestEntity;
     }
