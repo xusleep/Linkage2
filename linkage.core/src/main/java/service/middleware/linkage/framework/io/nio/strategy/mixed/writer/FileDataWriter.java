@@ -7,7 +7,7 @@ import service.middleware.linkage.framework.io.nio.LinkageSocketChannel;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.AbstractContentEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileEntityAbstract;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileInformationEntity;
-import service.middleware.linkage.framework.utils.ConvertUtils;
+import linkage.common.ConvertUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

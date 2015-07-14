@@ -29,7 +29,7 @@
             <AppenderRef ref="biz-log"/>
             <AppenderRef ref="console"/>
         </Logger>
-        <Logger name="service.middleware.linkage.framework.connection.pool" level="${log4j.level}" additivity="false">
+        <Logger name="service.middleware.linkage.framework.io.nio.connection.pool" level="${log4j.level}" additivity="false">
             <AppenderRef ref="biz-log"/>
             <AppenderRef ref="console"/>
         </Logger>

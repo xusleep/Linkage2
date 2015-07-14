@@ -6,7 +6,6 @@ import service.middleware.linkage.framework.access.domain.ServiceRequest;
 import service.middleware.linkage.framework.access.domain.ServiceResponse;
 import service.middleware.linkage.framework.setting.ServiceSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
-import service.middleware.linkage.framework.utils.StringUtils;
 
 import java.lang.reflect.Method;
 
@@ -71,7 +70,7 @@ public class DefaultServiceProvider implements ServiceProvider{
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.error("unexpected exception happened. exception detail:" + StringUtils.ExceptionStackTraceToString(e));
+			logger.error(e.getMessage(), e);
 			ServiceResponse response = new ServiceResponse();
 			response.setResult("no service found in the server.");
 			response.setRequestID(request.getRequestID());

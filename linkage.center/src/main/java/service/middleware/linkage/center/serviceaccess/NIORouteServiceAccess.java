@@ -8,7 +8,6 @@ import service.middleware.linkage.framework.access.domain.ServiceInformation;
 import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
 import service.middleware.linkage.framework.exception.ServiceException;
 import service.middleware.linkage.framework.io.WorkerPool;
-import service.middleware.linkage.framework.access.impl.ServiceAccessEngineImpl;
 import service.middleware.linkage.framework.access.impl.ServiceAccessImpl;
 import service.middleware.linkage.framework.access.domain.ServiceRequest;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
@@ -42,7 +41,7 @@ public class NIORouteServiceAccess extends ServiceAccessImpl implements RouteSer
 			result.setServiceInformation(serviceInformation);
 			if(serviceInformation == null)
 			{
-				ServiceAccessEngineImpl.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
+				ServiceAccessImpl.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
 				return result;
 			}
 		} 
@@ -52,11 +51,11 @@ public class NIORouteServiceAccess extends ServiceAccessImpl implements RouteSer
 			//logger.log(Level.WARNING, ex.getMessage());
 			//System.out.println("ComsumerBean ... exception happend " + ex.getMessage());
 			//ex.printStackTrace();
-			ServiceAccessEngineImpl.setExceptionToRuquestResult(result, new ServiceException(ex, "ComsumerBean ... exception happend"));
+			ServiceAccessImpl.setExceptionToRuquestResult(result, new ServiceException(ex, "ComsumerBean ... exception happend"));
         	route.clean(result);
         	return result;
         }
-		return serviceEngine.basicProcessRequest(objRequestEntity, result, serviceInformation, channelFromCached);
+		return serviceEngine.requestService(objRequestEntity, result, serviceInformation, channelFromCached);
 	}
 
 	@Override

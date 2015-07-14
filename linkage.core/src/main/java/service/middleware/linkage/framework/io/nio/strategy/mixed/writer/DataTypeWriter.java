@@ -7,7 +7,7 @@ import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.Abstrac
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.FileEntityAbstract;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketDataType;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketEntity;
-import service.middleware.linkage.framework.utils.ConvertUtils;
+import linkage.common.ConvertUtils;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

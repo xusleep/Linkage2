@@ -25,7 +25,7 @@ public class StartService {
     		//FileInformationEntity fileInformationEntity = new FileInformationEntity();
     		//fileInformationEntity.setFileID(1000);
     		//fileInformationEntity.setFilePath("E:\\testworkingfolder\\downloadClient\\1.mkv");
-    		//NIOMixedStrategy.addFileInformationEntity(fileInformationEntity);
+    		//NIOMessageStrategy.addFileInformationEntity(fileInformationEntity);
     		ServiceCenterClientUtils.defaultRouteConsume = clientBootStrap.getServiceAccess();
     		try {
     			ServiceCenterClientUtils.registerServiceList(ServiceCenterClientUtils.defaultRouteConsume, centerServiceInformation, serviceBootStrap.getServicePropertyEntity());

@@ -1,6 +1,6 @@
-package service.middleware.linkage.framework.utils;
+package service.middleware.linkage.framework.repository;
 
-public class ShareingData {
+public class ShareingDataRepository {
 	public static final String SERVICE_ADDRESS = "serviceAddress";
 	public static final String SERVICE_PORT = "servicePort";
 	public static final String SERVICE_START_STRING =  "service.service";

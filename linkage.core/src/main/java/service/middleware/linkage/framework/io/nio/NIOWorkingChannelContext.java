@@ -1,5 +1,6 @@
 package service.middleware.linkage.framework.io.nio;
 
+import linkage.common.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.middleware.linkage.framework.handlers.EventDistributionMaster;
@@ -7,7 +8,7 @@ import service.middleware.linkage.framework.io.WorkingChannelContext;
 import service.middleware.linkage.framework.io.WorkingChannelOperationResult;
 import service.middleware.linkage.framework.io.WorkingChannelStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
-import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMixedStrategy;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMessageStrategy;
 
 import java.nio.channels.Channel;
 import java.nio.channels.SelectionKey;
@@ -21,7 +22,7 @@ import java.nio.channels.SocketChannel;
  */
 public class NIOWorkingChannelContext implements WorkingChannelContext {
     private final LinkageSocketChannel channel;
-    private String id;
+    private final String id;
     private SelectionKey key;
     private volatile WorkingChannelMode workingMode;
     private WorkingChannelStrategy workingChannelStrategy;
@@ -32,6 +33,7 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
         this.channel = new LinkageSocketChannel((SocketChannel) channel);
         this.eventDistributionHandler = eventDistributionHandler;
         setWorkingStrategy(workingMode);
+        this.id = CommonUtils.generateId();
     }
 
     /**
@@ -40,7 +42,7 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
      */
     private void setWorkingStrategy(WorkingChannelMode theWorkingMode) {
         this.workingMode = theWorkingMode;
-        this.workingChannelStrategy = new NIOMixedStrategy(this, eventDistributionHandler);
+        this.workingChannelStrategy = new NIOMessageStrategy(this, eventDistributionHandler);
         logger.debug("working channel strategy is: " + theWorkingMode);
     }
 
@@ -77,10 +79,6 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public WorkingChannelMode getWorkingChannelMode() {

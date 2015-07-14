@@ -54,7 +54,7 @@ public class ConsumeEngineTest {
             ServiceInformation serviceInformation = new ServiceInformation();
             serviceInformation.setAddress(serviceBootStrap.getServicePropertyEntity().getServiceAddress());
             serviceInformation.setPort(serviceBootStrap.getServicePropertyEntity().getServicePort());
-            result = clientBootStrap.getServiceAccess().getServiceAccessEngine().basicProcessRequest(objRequestEntity, result, serviceInformation, false);
+            result = clientBootStrap.getServiceAccess().getServiceAccessEngine().requestService(objRequestEntity, result, serviceInformation, false);
             assertTrue("Exception happen when request , exception: " + (result.isException() ? result.getException().getMessage() : ""), !result.isException());
             assertTrue("result not right, 121 + 234 = 355, the result is " + result.getResponseEntity().getResult(),
                     result.getResponseEntity().getResult().equals("355"));
@@ -136,7 +136,7 @@ public class ConsumeEngineTest {
             ServiceInformation serviceInformation = new ServiceInformation();
             serviceInformation.setAddress(serviceBootStrap.getServicePropertyEntity().getServiceAddress());
             serviceInformation.setPort(serviceBootStrap.getServicePropertyEntity().getServicePort());
-            result = clientBootStrap.getServiceAccess().getServiceAccessEngine().basicProcessRequest(objRequestEntity, result, serviceInformation, isCachingChannel);
+            result = clientBootStrap.getServiceAccess().getServiceAccessEngine().requestService(objRequestEntity, result, serviceInformation, isCachingChannel);
             assertTrue("Exception happen when request , exception: " + (result.isException() ? result.getException().getMessage() : ""), !result.isException());
             assertTrue(String.format("result not right, %s + %s = %s, the result is %s", value1, value2, resultValue, result.getResponseEntity().getResult()), result.getResponseEntity().getResult().equals("" + resultValue));
         }

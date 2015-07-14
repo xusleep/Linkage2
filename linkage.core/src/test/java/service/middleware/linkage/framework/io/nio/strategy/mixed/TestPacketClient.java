@@ -1,19 +1,15 @@
 package service.middleware.linkage.framework.io.nio.strategy.mixed;
 
-import org.testng.annotations.Test;
 import service.middleware.linkage.framework.io.nio.LinkageSocketChannel;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.MessageEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketDataType;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.writer.*;
-import service.middleware.linkage.framework.utils.ConvertUtils;
 import test.framework.concurrence.condition.MainConcurrentThread;
 import test.framework.concurrence.condition.job.AbstractJob;
 import test.framework.concurrence.condition.job.JobInterface;
 
-import java.lang.management.BufferPoolMXBean;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.LinkedList;

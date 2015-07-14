@@ -37,8 +37,8 @@ public class NIOMessageModeClientBootStrap extends AbstractBootStrap implements 
 		}
 		// this is a client, in this client it will be a gather place where we will start the worker pool & task handler 
 		this.client = new NIOClient(this.getWorkerPool());
-		this.serviceAccess = new ServiceAccessImpl(objServicePropertyEntity, this.getWorkerPool());
-		this.getWorkerPool().getEventDistributionHandler().addHandler(new AccessClientHandler(this.getServiceAccess().getServiceAccessEngine()));
+		this.serviceAccess = new ServiceAccessImpl(objServicePropertyEntity);
+		this.getWorkerPool().getEventDistributionHandler().addHandler(new AccessClientHandler());
 	}
 	
 	/**

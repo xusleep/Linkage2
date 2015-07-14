@@ -1,4 +1,4 @@
-package service.middleware.linkage.framework.utils;
+package linkage.common;
 
 public class EncodingUtils {
 	/**

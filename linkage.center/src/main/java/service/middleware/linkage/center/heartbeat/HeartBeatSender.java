@@ -6,7 +6,7 @@ import service.middleware.linkage.center.ServiceCenter;
 import service.middleware.linkage.framework.access.ServiceAccess;
 import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
 import service.middleware.linkage.framework.access.domain.ServiceInformation;
-import service.middleware.linkage.framework.utils.ShareingData;
+import service.middleware.linkage.framework.repository.ShareingDataRepository;
 import service.middleware.linkage.framework.utils.StringUtils;
 
 import java.util.LinkedList;
@@ -40,12 +40,12 @@ public class HeartBeatSender implements Runnable {
 				{
 					// TODO Auto-generated method stub
 					List<Object> args = new LinkedList<Object>();
-					args.add(ShareingData.HEART_BEAT_SEND);
+					args.add(ShareingDataRepository.HEART_BEAT_SEND);
 					List<Class<?>> argTypes = new LinkedList<>();
 					argTypes.add(String.class);
-					args.add(ShareingData.HEART_BEAT_SEND);
-					ServiceRequestResult result = this.consume.requestServicePerConnectSync(ShareingData.HEART_BEAT_CLIENT_ID, args, argTypes, objServiceInformation);
-					if(ShareingData.HEART_BEAT_REPLY.equals(result.getResponseEntity().getResult())){
+					args.add(ShareingDataRepository.HEART_BEAT_SEND);
+					ServiceRequestResult result = this.consume.requestServicePerConnectSync(ShareingDataRepository.HEART_BEAT_CLIENT_ID, args, argTypes, objServiceInformation);
+					if(ShareingDataRepository.HEART_BEAT_REPLY.equals(result.getResponseEntity().getResult())){
 						logger.debug("service :" + objServiceInformation.toString() + " is available");
 					}
 					// if there is an exception when request the heart beat to the service

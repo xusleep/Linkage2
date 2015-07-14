@@ -47,7 +47,7 @@ public class ServiceInformation {
 		return port;
 	}
 
-	public String toLocalKey(){
+	public String getNetKey(){
 		return address + "_" + port;
 	}
 }

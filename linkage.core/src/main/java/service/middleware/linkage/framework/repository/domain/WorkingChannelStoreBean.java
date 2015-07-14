@@ -1,10 +1,8 @@
 package service.middleware.linkage.framework.repository.domain;
 
-import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
+import service.middleware.linkage.framework.access.RequestCallback;
 import service.middleware.linkage.framework.io.WorkingChannelContext;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -12,11 +10,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class WorkingChannelStoreBean {
     private final WorkingChannelContext workingChannelContext;
-    private final ConcurrentHashMap<String, ServiceRequestResult> serviceRequestResults;
+    private final ConcurrentHashMap<String, RequestCallback> serviceRequestCallbacks;
 
     public WorkingChannelStoreBean(WorkingChannelContext workingChannelContext){
         this.workingChannelContext = workingChannelContext;
-        this.serviceRequestResults = new ConcurrentHashMap<>();
+        this.serviceRequestCallbacks = new ConcurrentHashMap<>();
     }
 
     public WorkingChannelContext getWorkingChannelContext() {
@@ -26,9 +24,27 @@ public class WorkingChannelStoreBean {
     /**
      * put the request result in the result list
      *
-     * @param serviceRequestResult
+     * @param requestCallback
      */
-    public void offerRequestResult(ServiceRequestResult serviceRequestResult) {
-        serviceRequestResults.put(serviceRequestResult.getRequestID(), serviceRequestResult);
+    public void offerRequestResult(String requestId, RequestCallback requestCallback) {
+        serviceRequestCallbacks.put(requestId, requestCallback);
+    }
+
+    /**
+     * »ñµÃServiceRequestResult
+     * @param requestId
+     * @return
+     */
+    public RequestCallback getRequestCallback(String requestId){
+        return serviceRequestCallbacks.get(requestId);
+    }
+
+    /**
+     * É¾³ýServiceRequestResult
+     * @param requestId
+     * @return
+     */
+    public RequestCallback removeRequestCallback(String requestId){
+        return serviceRequestCallbacks.remove(requestId);
     }
 }

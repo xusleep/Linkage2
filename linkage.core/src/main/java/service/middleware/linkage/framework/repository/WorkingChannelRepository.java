@@ -1,8 +1,13 @@
 package service.middleware.linkage.framework.repository;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import service.middleware.linkage.framework.repository.domain.WorkingChannelStoreBean;
 
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,7 +16,7 @@ import java.util.List;
  */
 public class WorkingChannelRepository {
     private static final List<WorkingChannelStoreBean> WORKING_CHANNEL_STORE_BEAN_LIST = new LinkedList<WorkingChannelStoreBean>();
-
+    private static Logger logger = LoggerFactory.getLogger(WorkingChannelRepository.class);
     /**
      * add working channel entity
      * @param workingChannelStoreBean
@@ -63,12 +68,35 @@ public class WorkingChannelRepository {
      * @param id
      * @return
      */
-    public static synchronized WorkingChannelStoreBean getWorkingChannelStoreBean(String id){
+    public static synchronized WorkingChannelStoreBean getWorkingChannelStoreBeanByChannelId(String id){
         for(WorkingChannelStoreBean workingChannelStoreBean : WorkingChannelRepository.WORKING_CHANNEL_STORE_BEAN_LIST){
             if(StringUtils.equals(workingChannelStoreBean.getWorkingChannelContext().getId(), id)){
                 return workingChannelStoreBean;
             }
         }
         return null;
+    }
+
+    /**
+     * »ñµÃworking channel
+     * @param id
+     * @return
+     */
+    public static synchronized List<WorkingChannelStoreBean> getWorkingChannelStoreBeansByNetKey(String netKey){
+        List<WorkingChannelStoreBean> workingChannelStoreBeans = new LinkedList<>();
+        for(WorkingChannelStoreBean workingChannelStoreBean : WorkingChannelRepository.WORKING_CHANNEL_STORE_BEAN_LIST){
+            try {
+                SocketChannel socketChannel = workingChannelStoreBean.getWorkingChannelContext().getLinkageSocketChannel().getSocketChannel();
+                InetSocketAddress socketAddress = (InetSocketAddress)socketChannel.getRemoteAddress();
+                String key = socketAddress.getAddress() + "_" + socketAddress.getPort();
+                if (StringUtils.equals(key, netKey)) {
+                    workingChannelStoreBeans.add(workingChannelStoreBean);
+                }
+            }
+            catch (Exception ex){
+                logger.error(ex.getMessage(), ex);
+            }
+        }
+        return workingChannelStoreBeans;
     }
 }

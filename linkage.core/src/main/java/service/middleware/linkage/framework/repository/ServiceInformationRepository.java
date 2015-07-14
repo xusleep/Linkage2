@@ -1,10 +1,10 @@
 package service.middleware.linkage.framework.repository;
 
+import org.apache.commons.lang.StringUtils;
+import service.middleware.linkage.framework.access.domain.ServiceInformation;
+
 import java.util.LinkedList;
 import java.util.List;
-
-import service.middleware.linkage.framework.access.domain.ServiceInformation;
-import service.middleware.linkage.framework.utils.StringUtils;
 
 /**
  * client side service list repository

@@ -1,9 +1,8 @@
 package service.middleware.linkage.framework.access.domain;
 
-import java.util.HashMap;
-import java.util.LinkedList;
+import linkage.common.CommonUtils;
+
 import java.util.List;
-import java.util.Map;
 
 /**
  * this domain class stores the request information when request
@@ -14,20 +13,17 @@ public class ServiceRequest {
     private String serviceName;
     private String methodName;
     private String version;
-    private String requestID;
+    private final String requestID;
     private List<Object> args;
     private List<Class<?>> argsTyps;
     private String group;
 
     public ServiceRequest() {
+        this.requestID = CommonUtils.generateId();
     }
 
     public String getRequestID() {
         return requestID;
-    }
-
-    public void setRequestID(String requestID) {
-        this.requestID = requestID;
     }
 
     public String getServiceName() {

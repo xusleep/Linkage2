@@ -27,18 +27,18 @@ import java.util.concurrent.Executors;
  *
  * @author zhonxu
  */
-public class NIOMixedStrategy extends WorkingChannelStrategy {
+public class NIOMessageStrategy extends WorkingChannelStrategy {
     // event distribution master
     private final EventDistributionMaster eventDistributionHandler;
     // read buffer
     private StringBuffer readBuffer = new StringBuffer(10240);
     // write message event queue
     private Queue<ServiceOnMessageDataWriteEvent> writeMessageQueue = new ConcurrentLinkedQueue<ServiceOnMessageDataWriteEvent>();
-    private static Logger logger = LoggerFactory.getLogger(NIOMixedStrategy.class);
+    private static Logger logger = LoggerFactory.getLogger(NIOMessageStrategy.class);
     private final ExecutorService objExecutorService;
 
-    public NIOMixedStrategy(NIOWorkingChannelContext nioWorkingChannelContext,
-                            EventDistributionMaster eventDistributionHandler) {
+    public NIOMessageStrategy(NIOWorkingChannelContext nioWorkingChannelContext,
+                              EventDistributionMaster eventDistributionHandler) {
         super(nioWorkingChannelContext);
         this.eventDistributionHandler = eventDistributionHandler;
         this.objExecutorService = Executors.newFixedThreadPool(10);
@@ -105,7 +105,7 @@ public class NIOMixedStrategy extends WorkingChannelStrategy {
             objExecutorService.execute(new Runnable() {
                 @Override
                 public void run() {
-                    ServiceOnMessageDataReceivedEvent event = new ServiceOnMessageDataReceivedEvent(NIOMixedStrategy.this.getWorkingChannelContext(), sendMessage);
+                    ServiceOnMessageDataReceivedEvent event = new ServiceOnMessageDataReceivedEvent(NIOMessageStrategy.this.getWorkingChannelContext(), sendMessage);
                     eventDistributionHandler.submitServiceEvent(event);
                 }
 

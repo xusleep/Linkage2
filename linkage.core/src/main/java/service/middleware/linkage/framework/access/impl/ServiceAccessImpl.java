@@ -1,90 +1,107 @@
 package service.middleware.linkage.framework.access.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import service.middleware.linkage.framework.access.RequestCallback;
 import service.middleware.linkage.framework.access.ServiceAccess;
-import service.middleware.linkage.framework.access.ServiceAccessEngine;
-import service.middleware.linkage.framework.access.domain.ServiceInformation;
 import service.middleware.linkage.framework.access.domain.ServiceRequest;
-import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
-import service.middleware.linkage.framework.access.domain.ServiceResponse;
-import service.middleware.linkage.framework.exception.ServiceException;
-import service.middleware.linkage.framework.io.WorkerPool;
+import service.middleware.linkage.framework.io.nio.NIOWorkingChannelContext;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMessageStrategy;
+import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataWriteEvent;
+import service.middleware.linkage.framework.repository.domain.WorkingChannelStoreBean;
+import service.middleware.linkage.framework.route.Route;
+import service.middleware.linkage.framework.route.impl.DefaultRoute;
+import service.middleware.linkage.framework.serialization.SerializationUtils;
+import service.middleware.linkage.framework.setting.ClientSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * the default consume which wrapped the method request
+ * this an engine class of consume
  *
  * @author zhonxu
  */
 public class ServiceAccessImpl implements ServiceAccess {
+    private static Logger logger = LoggerFactory.getLogger(ServiceAccessImpl.class);
+    private final ClientSettingReader workingClientPropertyEntity;
+    private final Route route;
 
-    protected ServiceAccessEngine serviceEngine;
-    // use the concurrent hash map to store the request result list {@link ServiceRequestResult}
-    private final ConcurrentHashMap<String, ServiceRequestResult> resultList = new ConcurrentHashMap<String, ServiceRequestResult>(2048);
-
-    public ServiceAccessImpl(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool) {
-        serviceEngine = new ServiceAccessEngineImpl(workingClientPropertyEntity, workerPool);
+    public ServiceAccessImpl(ClientSettingReader workingClientPropertyEntity) {
+        this.workingClientPropertyEntity = workingClientPropertyEntity;
+        this.route = new DefaultRoute();
     }
 
-    @Override
-    public ServiceRequestResult requestService(String clientID, List<Object> args, List<Class<?>> argTypes, ServiceInformation serviceInformation) {
-        return requestService(clientID, args, argTypes, serviceInformation, true);
-    }
-
-    @Override
-    public ServiceRequestResult requestServicePerConnect(String clientID,
-                                                         List<Object> args, List<Class<?>> argTypes, ServiceInformation serviceInformation) {
-        // TODO Auto-generated method stub
-        return requestService(clientID, args, argTypes, serviceInformation, false);
-    }
-
-    @Override
-    public ServiceRequestResult requestServicePerConnectSync(String clientID,
-                                                             List<Object> args, List<Class<?>> argTypes, ServiceInformation serviceInformation) {
-        ServiceRequestResult result = requestService(clientID, args, argTypes, serviceInformation, false);
-        result.getResponseEntity();
-        result.setServiceInformation(serviceInformation);
-        this.closeChannelByRequestResult(result);
-        return result;
-    }
-
-    @Override
-    public ServiceRequestResult requestService(String clientID, List<Object> args, List<Class<?>> argTypes,
-                                               ServiceInformation serviceInformation, boolean channelFromCached) {
-        ServiceRequest objRequestEntity = serviceEngine.createRequestEntity(clientID, args, argTypes);
-        ServiceRequestResult result = new ServiceRequestResult();
-        result.setRequestID(objRequestEntity.getRequestID());
-        return this.serviceEngine.basicProcessRequest(objRequestEntity, result, serviceInformation, channelFromCached);
-    }
-
-    @Override
-    public void closeChannelByRequestResult(
-            ServiceRequestResult objServiceRequestResult) {
-        // TODO Auto-generated method stub
-        serviceEngine.closeChannelByRequestResult(objServiceRequestResult);
-    }
-
-    @Override
-    public ServiceAccessEngine getServiceAccessEngine() {
-        // TODO Auto-generated method stub
-        return serviceEngine;
+    public ServiceAccessImpl(ClientSettingReader workingClientPropertyEntity, Route route) {
+        this.workingClientPropertyEntity = workingClientPropertyEntity;
+        this.route = route;
     }
 
     /**
-     * when the response comes, use this method to set it.
+     * search the configuration check the configure for the service
      *
-     * @param objResponseEntity
+     * @param id
+     * @return
      */
-    public ServiceRequestResult setRequestResult(ServiceResponse objResponseEntity) {
-        return serviceEngine.setRequestResult(objResponseEntity);
+    protected ClientSettingEntity searchServiceClientEntity(String id) {
+        for (ClientSettingEntity entity : this.workingClientPropertyEntity.getServiceClientList()) {
+            if (entity.getId().equals(id)) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * request service
+     *
+     * @param address
+     * @param port
+     * @param clientID
+     * @param args
+     * @param argType
+     * @param requestCallback
+     */
+    @Override
+    public void requestService(String address, int port, String clientID, List<Object> args, List<Class<?>> argType,
+                               RequestCallback requestCallback) {
+        ServiceRequest objRequestEntity = this.createRequestEntity(clientID, args, argType);
+        WorkingChannelStoreBean workingChannelStoreBean = null;
+        NIOWorkingChannelContext workingChannel = null;
+        NIOMessageStrategy strategy = null;
+        try {
+            workingChannelStoreBean = route.chooseRoute(address, port);
+            workingChannel = (NIOWorkingChannelContext) workingChannelStoreBean.getWorkingChannelContext();
+            workingChannelStoreBean.offerRequestResult(objRequestEntity.getRequestID(), requestCallback);
+            strategy = (NIOMessageStrategy) workingChannel.getWorkingChannelStrategy();
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        String sendData = SerializationUtils.serializeRequest(objRequestEntity);
+        ServiceOnMessageDataWriteEvent objServiceOnMessageWriteEvent;
+        logger.debug("request: " + sendData);
+        objServiceOnMessageWriteEvent = new ServiceOnMessageDataWriteEvent(workingChannel, sendData);
+        strategy.offerMessageWriteQueue(objServiceOnMessageWriteEvent);
+        strategy.writeChannel();
     }
 
     /**
-     * clear the result
+     * create a request entity
+     *
+     * @param clientID
+     * @param args
+     * @return
      */
-    public void clearAllResult(ServiceException exception) {
-        serviceEngine.clearAllResult(exception);
+    public ServiceRequest createRequestEntity(String clientID, List<Object> args, List<Class<?>> argTypes) {
+        final ServiceRequest objRequestEntity = new ServiceRequest();
+        ClientSettingEntity objServiceClientEntity = searchServiceClientEntity(clientID);
+        objRequestEntity.setMethodName(objServiceClientEntity.getServiceMethod());
+        objRequestEntity.setGroup(objServiceClientEntity.getServiceGroup());
+        objRequestEntity.setServiceName(objServiceClientEntity.getServiceName());
+        objRequestEntity.setArgs(args);
+        objRequestEntity.setArgsTyps(argTypes);
+        objRequestEntity.setVersion(objServiceClientEntity.getServiceVersion());
+        return objRequestEntity;
     }
 }

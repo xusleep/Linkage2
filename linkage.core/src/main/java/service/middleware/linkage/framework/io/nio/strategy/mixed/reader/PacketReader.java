@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import service.middleware.linkage.framework.io.nio.LinkageSocketChannel;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.AbstractContentEntity;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.packet.PacketEntity;
-import service.middleware.linkage.framework.utils.ConvertUtils;
+import linkage.common.ConvertUtils;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
