@@ -38,10 +38,15 @@ public class AccessServiceHandler extends Handler {
             logger.debug("ServiceOnMessageDataReceivedEvent receive message : " + objServiceOnMessageDataReceivedEvent.getMessageData());
             ServiceResponse objResponseEntity = this.provider.acceptServiceRequest(objRequestEntity);
             String responseStr = SerializationUtils.serializeResponse(objResponseEntity);
-            logger.debug("ServiceOnMessageDataWriteEvent write back message : " + responseStr);
-            ServiceOnMessageDataWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageDataWriteEvent(channel, new String(responseStr.getBytes("GBK"), EncodingUtils.FRAMEWORK_IO_ENCODING));
-            strategy.offerMessageWriteQueue(objServiceOnMessageWriteEvent);
-            strategy.writeChannel();
+            if (channel.getLinkageSocketChannel().isOpen()) {
+                logger.debug("ServiceOnMessageDataWriteEvent write back message : " + responseStr);
+                ServiceOnMessageDataWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageDataWriteEvent(channel, new String(responseStr.getBytes("GBK"), EncodingUtils.FRAMEWORK_IO_ENCODING));
+                strategy.offerMessageWriteQueue(objServiceOnMessageWriteEvent);
+                strategy.writeChannel();
+            }
+            else{
+                logger.debug("channel is closed, drop message writting:" + responseStr);
+            }
         } else if (event instanceof ServiceOnFileDataReceivedEvent) {
             ServiceOnFileDataReceivedEvent objServerOnFileDataReceivedEvent = (ServiceOnFileDataReceivedEvent) event;
             logger.debug("ServerOnFileDataReceivedEvent receive message : " + objServerOnFileDataReceivedEvent.getFileID());
