@@ -37,14 +37,12 @@ public class StartClient extends AbstractJob {
 
 	@Override
 	public void doConcurrentJob() {
-		for(long i = 0; i < 99999999; i++)
+		for(long i = 0; i < 1; i++)
 		{
 			//System.out.println("request count ..." + requestCount.incrementAndGet());
 	    	List<Object> args1 = new LinkedList<Object>();
-	    	String a = "" + requestCount.incrementAndGet();
-	    	String b = "" + aint.incrementAndGet();
-	    	args1.add(a);
-	    	args1.add(b);
+	    	args1.add(requestCount.incrementAndGet());
+	    	args1.add(aint.incrementAndGet());
             cb.requestService("localhost", 5003, "calculator", args1, new RequestCallback() {
                 @Override
                 public void runCallback(Object serviceResponse) {
@@ -70,7 +68,7 @@ public class StartClient extends AbstractJob {
 		clientBootStrap.run();
 		ServiceAccess cb = clientBootStrap.getServiceAccess();
 		StartClient job1 = new StartClient(cb);
-		job1.setThreadCount(50);
+		job1.setThreadCount(1);
 		List<JobInterface> jobList = new LinkedList<JobInterface>();
 		jobList.add(job1);
 		MainConcurrentThread mct1 = new MainConcurrentThread(jobList);

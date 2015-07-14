@@ -50,8 +50,11 @@ public class DefaultServiceProvider implements ServiceProvider{
 			Class clazz = Class.forName(entity.getServiceInterface());
 			Method findMethod = null;
 			Class<?>[] argsTypes = new Class<?>[request.getArgs().size()];
-			for(int i =0; i < request.getArgs().size(); i++){
-				argsTypes[i] = request.getArgs().get(i).getClass();
+			Object[] args = new Object[request.getArgs().size()];
+			for(int i =0; i < request.getArgTypes().size(); i++){
+				String className = request.getArgTypes().get(i);
+				argsTypes[i] = Class.forName(className);
+				args[i] = argsTypes[i].cast(request.getArgs().get(i));
 			}
 			findMethod = clazz.getMethod(request.getMethodName(), argsTypes);
 
@@ -59,7 +62,7 @@ public class DefaultServiceProvider implements ServiceProvider{
 			{
 				Object result = null;
 				if(request.getArgs() != null) {
-					result = findMethod.invoke(entity.getServiceTargetObject(), request.getArgs().toArray());
+					result = findMethod.invoke(entity.getServiceTargetObject(), args);
 				}
 				else{
 					result = findMethod.invoke(entity.getServiceTargetObject(), null);

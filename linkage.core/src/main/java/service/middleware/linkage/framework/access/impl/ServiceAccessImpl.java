@@ -102,7 +102,7 @@ public class ServiceAccessImpl implements ServiceAccess {
         objRequestEntity.setArgs(args);
         List<String> argTypes = new LinkedList<>();
         for(Object o : args){
-            argTypes.add(o.getClass().toString());
+            argTypes.add(o.getClass().getName());
         }
         objRequestEntity.setArgTypes(argTypes);
         objRequestEntity.setVersion(objServiceClientEntity.getServiceVersion());
