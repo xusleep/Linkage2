@@ -10,12 +10,13 @@ import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by hzxuzhonglin on 2015/7/13.
  */
 public class WorkingChannelRepository {
-    private static final List<WorkingChannelStoreBean> WORKING_CHANNEL_STORE_BEAN_LIST = new LinkedList<WorkingChannelStoreBean>();
+    private static final List<WorkingChannelStoreBean> WORKING_CHANNEL_STORE_BEAN_LIST = new CopyOnWriteArrayList<WorkingChannelStoreBean>();
     private static Logger logger = LoggerFactory.getLogger(WorkingChannelRepository.class);
     /**
      * add working channel entity

@@ -3,7 +3,7 @@ package test.service;
 public class CalculatorImpl implements Calculator {
 
 	@Override
-	public String add(Integer a, Integer b) {
+	public String add(String a, String b) {
 		try {
 			Thread.sleep(0);
 		} catch (InterruptedException e) {

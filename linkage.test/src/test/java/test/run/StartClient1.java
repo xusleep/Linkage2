@@ -6,9 +6,9 @@
 //import java.util.concurrent.atomic.AtomicInteger;
 //
 //import service.middleware.linkage.center.bootstrap.NIOCenterClientBootStrap;
-//import service.middleware.linkage.center.client.ServiceCenterClientUtils;
+//import service.middleware.linkage.center.client.ServiceCenterCommonRepository;
 //import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
-//import service.middleware.linkage.framework.access.domain.ServiceInformation;
+//import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;
 //import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
 //import service.middleware.linkage.framework.bootstrap.NIOServerBootStrap;
 //import test.framework.concurrence.condition.MainConcurrentThread;
@@ -61,7 +61,7 @@
 //	    		}
 //	    		else
 //	    		{
-//	    			System.out.println("a = " + a + " + b = " + b + " = " + result.getResponseEntity().getResult());
+//	    			System.out.println("a = " + a + " + b = " + b + " = " + result.getResponseEntity().getJsonResult());
 //	    			successCount.incrementAndGet();
 //	    		}
 //
@@ -80,7 +80,7 @@
 //	}
 //
 //	public static void main(String[] args) throws Exception {
-//    	ServiceInformation centerServiceInformation = new ServiceInformation();
+//    	ServiceRegisterEntry centerServiceInformation = new ServiceRegisterEntry();
 //    	centerServiceInformation.setAddress("localhost");
 //    	centerServiceInformation.setPort(5002);
 //		NIOCenterClientBootStrap clientBootStrap = new NIOCenterClientBootStrap("conf/client_client.properties", 5, centerServiceInformation);
@@ -88,10 +88,10 @@
 //    	NIOServerBootStrap serviceBootStrap = new NIOServerBootStrap("conf/client_server.properties", 5);
 //    	serviceBootStrap.run();
 //    	NIORouteServiceAccess cb = clientBootStrap.getServiceAccess();
-//		ServiceInformation clientServiceInformation = new ServiceInformation();
+//		ServiceRegisterEntry clientServiceInformation = new ServiceRegisterEntry();
 //		clientServiceInformation.setAddress(serviceBootStrap.getServicePropertyEntity().getServiceAddress());
 //		clientServiceInformation.setPort(serviceBootStrap.getServicePropertyEntity().getServicePort());
-//		ServiceCenterClientUtils.registerClientInformation(cb, clientServiceInformation, centerServiceInformation);
+//		ServiceCenterCommonRepository.registerClientInformation(cb, clientServiceInformation, centerServiceInformation);
 //		StartClient1 job1 = new StartClient1(cb);
 //		job1.setThreadCount(2000);
 //		List<JobInterface> jobList = new LinkedList<JobInterface>();

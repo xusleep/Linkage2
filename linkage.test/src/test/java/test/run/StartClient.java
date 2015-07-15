@@ -9,7 +9,7 @@
 //import service.middleware.linkage.center.bootstrap.NIOCenterClientBootStrap;
 //import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
 //import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
-//import service.middleware.linkage.framework.access.domain.ServiceInformation;
+//import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;
 //import test.framework.concurrence.condition.MainConcurrentThread;
 //import test.framework.concurrence.condition.job.AbstractJob;
 //import test.framework.concurrence.condition.job.JobInterface;
@@ -37,7 +37,7 @@
 //
 //	@Override
 //	public void doConcurrentJob() {
-//    	ServiceInformation centerServiceInformation = new ServiceInformation();
+//    	ServiceRegisterEntry centerServiceInformation = new ServiceRegisterEntry();
 //    	centerServiceInformation.setAddress("localhost");
 //    	centerServiceInformation.setPort(5002);
 //		NIOCenterClientBootStrap clientBootStrap = new NIOCenterClientBootStrap("conf/client_client.properties", 5, centerServiceInformation);
@@ -59,7 +59,7 @@
 //					break;
 //				}
 //	    		ServiceRequestResult result = cb.requestService("calculator", args1);
-//	    		System.out.println("a = " + a + " + b = " + b + " = " + result.getResponseEntity().getResult());
+//	    		System.out.println("a = " + a + " + b = " + b + " = " + result.getResponseEntity().getJsonResult());
 //				successCount.incrementAndGet();
 //	    	}
 //	    	catch(Exception ex){

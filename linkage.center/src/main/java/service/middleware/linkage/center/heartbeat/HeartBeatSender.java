@@ -5,7 +5,7 @@
 //import service.middleware.linkage.center.ServiceCenter;
 //import service.middleware.linkage.framework.access.ServiceAccess;
 //import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
-//import service.middleware.linkage.framework.access.domain.ServiceInformation;
+//import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;
 //import service.middleware.linkage.framework.repository.ShareingDataRepository;
 //import service.middleware.linkage.framework.utils.StringUtils;
 //
@@ -33,10 +33,10 @@
 //	@Override
 //	public void run() {
 //		while(true){
-//			synchronized(ServiceCenter.serviceInformationList)
+//			synchronized(ServiceCenter.SERVICE_REGISTER_ENTRY_LIST)
 //			{
-//				List<ServiceInformation> failedServiceInformationList = new LinkedList<ServiceInformation>();
-//				for(ServiceInformation objServiceInformation : ServiceCenter.serviceInformationList)
+//				List<ServiceRegisterEntry> failedServiceInformationList = new LinkedList<ServiceRegisterEntry>();
+//				for(ServiceRegisterEntry objServiceInformation : ServiceCenter.SERVICE_REGISTER_ENTRY_LIST)
 //				{
 //					// TODO Auto-generated method stub
 //					List<Object> args = new LinkedList<Object>();
@@ -45,7 +45,7 @@
 //					argTypes.add(String.class);
 //					args.add(ShareingDataRepository.HEART_BEAT_SEND);
 //					ServiceRequestResult result = this.consume.requestServicePerConnectSync(ShareingDataRepository.HEART_BEAT_CLIENT_ID, args, argTypes, objServiceInformation);
-//					if(ShareingDataRepository.HEART_BEAT_REPLY.equals(result.getResponseEntity().getResult())){
+//					if(ShareingDataRepository.HEART_BEAT_REPLY.equals(result.getResponseEntity().getJsonResult())){
 //						logger.debug("service :" + objServiceInformation.toString() + " is available");
 //					}
 //					// if there is an exception when request the heart beat to the service
@@ -67,7 +67,7 @@
 //						logger.debug("sucessfull request information : " + result.getServiceInformation().toDetailString());
 //					}
 //				}
-//				ServiceCenter.serviceInformationList.removeAll(failedServiceInformationList);
+//				ServiceCenter.SERVICE_REGISTER_ENTRY_LIST.removeAll(failedServiceInformationList);
 //			}
 //			try {
 //				Thread.sleep(2000);

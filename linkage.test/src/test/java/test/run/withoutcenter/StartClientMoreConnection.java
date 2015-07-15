@@ -2,6 +2,7 @@ package test.run.withoutcenter;
 
 import service.middleware.linkage.framework.access.RequestCallback;
 import service.middleware.linkage.framework.access.ServiceAccess;
+import service.middleware.linkage.framework.access.domain.ServiceParameter;
 import service.middleware.linkage.framework.bootstrap.NIOClientBootStrap;
 import test.framework.concurrence.condition.MainConcurrentThread;
 import test.framework.concurrence.condition.job.AbstractJob;
@@ -42,9 +43,9 @@ public class StartClientMoreConnection extends AbstractJob {
 		for(long i = 0; i < 99999999; i++)
 		{
 			//System.out.println("request count ..." + requestCount.incrementAndGet());
-	    	List<Object> args1 = new LinkedList<Object>();
-	    	args1.add(new Integer(requestCount.incrementAndGet()));
-	    	args1.add(new Integer(aint.incrementAndGet()));
+	    	List<ServiceParameter> args1 = new LinkedList<ServiceParameter>();
+	    	args1.add(new ServiceParameter("a", "String", requestCount.incrementAndGet()));
+	    	args1.add(new ServiceParameter("b", "String", aint.incrementAndGet()));
             cb.requestService("localhost", 5003, "calculator", args1, new RequestCallback() {
                 @Override
                 public void runCallback(Object serviceResponse) {

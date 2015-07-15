@@ -48,11 +48,11 @@
 //	public void testSerializeResponse() {
 //		ServiceResponse response = new ServiceResponse();
 //		response.setRequestID("100001212");
-//		response.setResult("sdsjdlfkj$@^!*#!4457@$$");
+//		response.setJsonResult("sdsjdlfkj$@^!*#!4457@$$");
 //		String serializeStr = SerializationUtils.serializeResponse(response);
 //		System.out.println("serializeStr : " + serializeStr);
 //		ServiceResponse result = SerializationUtils.deserializeResponse(serializeStr);
-//		assertTrue("result.getResult() not equals to sdsjdlfkj$@^!*#!4457@$$ realvalue is " + result.getResult(),  result.getResult().equals("sdsjdlfkj$@^!*#!4457@$$"));
+//		assertTrue("result.getJsonResult() not equals to sdsjdlfkj$@^!*#!4457@$$ realvalue is " + result.getJsonResult(),  result.getJsonResult().equals("sdsjdlfkj$@^!*#!4457@$$"));
 //		assertTrue("result.setRequestID()   not equals to 100001212 realvalue is " + result.getRequestID(),  result.getRequestID().equals("100001212"));
 //	}
 //}

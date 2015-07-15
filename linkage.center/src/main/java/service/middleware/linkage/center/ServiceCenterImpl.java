@@ -3,9 +3,9 @@
 //import java.util.LinkedList;
 //import java.util.List;
 //
-//import service.middleware.linkage.center.client.ServiceCenterClientUtils;
+//import service.middleware.linkage.center.client.ServiceCenterCommonRepository;
 //import service.middleware.linkage.center.common.ServiceCenterUtils;
-//import service.middleware.linkage.framework.access.domain.ServiceInformation;
+//import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;
 //import service.middleware.linkage.framework.exception.ServiceException;
 //
 ///**
@@ -18,37 +18,37 @@
 //	@Override
 //	public Boolean register(String serviceInfor) {
 //		// TODO Auto-generated method stub
-//		List<ServiceInformation> objServiceInformation = ServiceCenterUtils.deserializeServiceInformationList(serviceInfor);
-//		synchronized(ServiceCenter.serviceInformationList)
+//		List<ServiceRegisterEntry> objServiceInformation = ServiceCenterUtils.deserializeServiceInformationList(serviceInfor);
+//		synchronized(ServiceCenter.SERVICE_REGISTER_ENTRY_LIST)
 //		{
-//			ServiceCenter.serviceInformationList.addAll(objServiceInformation);
+//			ServiceCenter.SERVICE_REGISTER_ENTRY_LIST.addAll(objServiceInformation);
 //		}
-//		for(ServiceInformation clientServiceInformation : ServiceCenter.serviceClientList)
+//		for(ServiceRegisterEntry clientServiceInformation : ServiceCenter.serviceClientList)
 //		{
 //			try {
-//				ServiceCenterClientUtils.notifyClientServiceAdd(ServiceCenterClientUtils.defaultRouteConsume, clientServiceInformation, objServiceInformation);
+//				ServiceCenterCommonRepository.notifyClientServiceAdd(ServiceCenterCommonRepository.defaultRouteConsume, clientServiceInformation, objServiceInformation);
 //			} catch (ServiceException e) {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
 //		}
-//		System.out.println("register service count = " + ServiceCenter.serviceInformationList.size());
+//		System.out.println("register service count = " + ServiceCenter.SERVICE_REGISTER_ENTRY_LIST.size());
 //		return true;
 //	}
 //
 //	@Override
 //	public Boolean registerClientList(String serviceInfor) {
-//		ServiceInformation objServiceInformation = ServiceCenterUtils.deserializeServiceInformation(serviceInfor);
+//		ServiceRegisterEntry objServiceInformation = ServiceCenterUtils.deserializeServiceInformation(serviceInfor);
 //		ServiceCenter.serviceClientList.add(objServiceInformation);
 //		System.out.println("serviceInfor = " + serviceInfor);
-//		System.out.println("service client count = " + ServiceCenter.serviceInformationList.size());
+//		System.out.println("service client count = " + ServiceCenter.SERVICE_REGISTER_ENTRY_LIST.size());
 //		return true;
 //	}
 //
 //	@Override
-//	public List<ServiceInformation> getServiceList(String serviceName) {
-//		List<ServiceInformation> resultList = new LinkedList<ServiceInformation>();
-//		for(ServiceInformation objServiceInformation : ServiceCenter.serviceInformationList){
+//	public List<ServiceRegisterEntry> getServiceList(String serviceName) {
+//		List<ServiceRegisterEntry> resultList = new LinkedList<ServiceRegisterEntry>();
+//		for(ServiceRegisterEntry objServiceInformation : ServiceCenter.SERVICE_REGISTER_ENTRY_LIST){
 //			if(objServiceInformation.getServiceName().equals(serviceName))
 //			{
 //				resultList.add(objServiceInformation);
@@ -60,16 +60,16 @@
 //	 * ɾ�������б�
 //	 */
 //	public Boolean removeServiceList(String serviceName){
-//		List<ServiceInformation> resultList = new LinkedList<ServiceInformation>();
-//		synchronized(ServiceCenter.serviceInformationList)
+//		List<ServiceRegisterEntry> resultList = new LinkedList<ServiceRegisterEntry>();
+//		synchronized(ServiceCenter.SERVICE_REGISTER_ENTRY_LIST)
 //		{
-//			for(ServiceInformation objServiceInformation : ServiceCenter.serviceInformationList){
+//			for(ServiceRegisterEntry objServiceInformation : ServiceCenter.SERVICE_REGISTER_ENTRY_LIST){
 //				if(objServiceInformation.getServiceName().equals(serviceName))
 //				{
 //					resultList.add(objServiceInformation);
 //				}
 //			}
-//			ServiceCenter.serviceInformationList.removeAll(resultList);
+//			ServiceCenter.SERVICE_REGISTER_ENTRY_LIST.removeAll(resultList);
 //		}
 //		return true;
 //	}

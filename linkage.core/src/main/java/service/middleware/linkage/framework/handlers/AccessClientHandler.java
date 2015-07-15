@@ -32,7 +32,7 @@ public class AccessClientHandler extends Handler {
             ServiceResponse objResponseEntity = SerializationUtils.deserializeResponse(receiveData);
             WorkingChannelStoreBean workingChannelStoreBean = WorkingChannelRepository.getWorkingChannelStoreBeanByChannelId(objServiceOnMessageDataReceivedEvent.getWorkingChannel().getId());
             RequestCallback requestCallback = workingChannelStoreBean.getRequestCallback(objResponseEntity.getRequestID());
-            requestCallback.runCallback(objResponseEntity.getResult());
+            requestCallback.runCallback(objResponseEntity.getJsonResult());
         } else if (event instanceof ServiceOnFileDataReceivedEvent) {
             ServiceOnFileDataReceivedEvent objServerOnFileDataReceivedEvent = (ServiceOnFileDataReceivedEvent) event;
             logger.debug("ServerOnFileDataReceivedEvent receive message : " + objServerOnFileDataReceivedEvent.getFileID());

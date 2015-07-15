@@ -6,7 +6,7 @@
 //import java.util.List;
 //
 //import service.middleware.linkage.center.common.ServiceCenterUtils;
-//import service.middleware.linkage.framework.access.domain.ServiceInformation;
+//import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;
 //
 ///**
 // * this interface is used in the client.
@@ -19,14 +19,14 @@
 //
 //	@Override
 //	public String removeService(String serviceInfor) {
-//		List<ServiceInformation> objServiceInformationList = ServiceCenterUtils.deserializeServiceInformationList(serviceInfor);
+//		List<ServiceRegisterEntry> objServiceInformationList = ServiceCenterUtils.deserializeServiceInformationList(serviceInfor);
 //		removeServiceInformationList(objServiceInformationList);
 //		return null;
 //	}
 //
 //	@Override
 //	public String addService(String serviceInfor) {
-//		List<ServiceInformation> objServiceInformationList = ServiceCenterUtils.deserializeServiceInformationList(serviceInfor);
+//		List<ServiceRegisterEntry> objServiceInformationList = ServiceCenterUtils.deserializeServiceInformationList(serviceInfor);
 //		addServiceInformationList(objServiceInformationList);
 //		return "true";
 //	}

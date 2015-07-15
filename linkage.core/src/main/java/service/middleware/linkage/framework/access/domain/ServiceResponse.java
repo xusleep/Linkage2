@@ -7,14 +7,14 @@ package service.middleware.linkage.framework.access.domain;
  */
 public class ServiceResponse {
 	private String requestID;
-	private Object result;
+	private String jsonResult;
 
-	public Object getResult() {
-		return result;
+	public String getJsonResult() {
+		return jsonResult;
 	}
 
-	public void setResult(Object result) {
-		this.result = result;
+	public void setJsonResult(String jsonResult) {
+		this.jsonResult = jsonResult;
 	}
 
 	public String getRequestID() {

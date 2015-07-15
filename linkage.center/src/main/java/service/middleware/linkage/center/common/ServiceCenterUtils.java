@@ -15,7 +15,7 @@
 //import org.w3c.dom.NodeList;
 //import org.xml.sax.SAXException;
 //
-//import service.middleware.linkage.framework.access.domain.ServiceInformation;
+//import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;
 //
 //public final class ServiceCenterUtils {
 //
@@ -26,7 +26,7 @@
 //	 * @return
 //	 */
 //	public static String serializeServiceInformation(
-//			ServiceInformation objServiceInformation) {
+//			ServiceRegisterEntry objServiceInformation) {
 //		StringBuilder sb = new StringBuilder();
 //		sb.append("<serviceInformation>");
 //		sb.append("<address>");
@@ -54,7 +54,7 @@
 //	 * @param request
 //	 * @return
 //	 */
-//	public static ServiceInformation deserializeServiceInformation(
+//	public static ServiceRegisterEntry deserializeServiceInformation(
 //			String receiveData) {
 //		try {
 //			InputStream is = new StringBufferInputStream(receiveData);
@@ -81,7 +81,7 @@
 //					serviceVersion = node.getTextContent();
 //				}
 //			}
-//			ServiceInformation objServiceInformation = new ServiceInformation(
+//			ServiceRegisterEntry objServiceInformation = new ServiceRegisterEntry(
 //					address, Integer.parseInt(port), serviceName,
 //					serviceMethod, serviceVersion);
 //			return objServiceInformation;
@@ -104,12 +104,12 @@
 //	 * @param request
 //	 * @return
 //	 */
-//	public static List<ServiceInformation> deserializeServiceInformationList(
+//	public static List<ServiceRegisterEntry> deserializeServiceInformationList(
 //			String receiveData) {
 //		try {
 //			System.out.println("deserializeServiceInformationList :"
 //					+ receiveData);
-//			List<ServiceInformation> list = new LinkedList<ServiceInformation>();
+//			List<ServiceRegisterEntry> list = new LinkedList<ServiceRegisterEntry>();
 //			InputStream is = new StringBufferInputStream(receiveData);
 //			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 //			DocumentBuilder db = dbf.newDocumentBuilder();
@@ -138,7 +138,7 @@
 //							serviceVersion = node1.getTextContent();
 //						}
 //					}
-//					ServiceInformation objServiceInformation = new ServiceInformation(
+//					ServiceRegisterEntry objServiceInformation = new ServiceRegisterEntry(
 //							address, Integer.parseInt(port), serviceName,
 //							serviceMethod, serviceVersion);
 //					list.add(objServiceInformation);
@@ -165,10 +165,10 @@
 //	 * @return
 //	 */
 //	public static String serializeServiceInformationList(
-//			List<ServiceInformation> serviceInformationList) {
+//			List<ServiceRegisterEntry> SERVICE_REGISTER_ENTRY_LIST) {
 //		StringBuilder sb = new StringBuilder();
-//		sb.append("<serviceInformationList>");
-//		for (ServiceInformation objServiceInformation : serviceInformationList) {
+//		sb.append("<SERVICE_REGISTER_ENTRY_LIST>");
+//		for (ServiceRegisterEntry objServiceInformation : SERVICE_REGISTER_ENTRY_LIST) {
 //			sb.append("<serviceInformation>");
 //			sb.append("<address>");
 //			sb.append(objServiceInformation.getAddress());
@@ -187,7 +187,7 @@
 //			sb.append("</serviceVersion>");
 //			sb.append("</serviceInformation>");
 //		}
-//		sb.append("</serviceInformationList>");
+//		sb.append("</SERVICE_REGISTER_ENTRY_LIST>");
 //		return sb.toString();
 //	}
 //}

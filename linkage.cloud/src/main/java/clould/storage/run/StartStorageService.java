@@ -2,8 +2,8 @@
 //
 //import clould.storage.service.handler.FileHandler;
 //import service.middleware.linkage.center.bootstrap.NIOCenterClientBootStrap;
-//import service.middleware.linkage.center.client.ServiceCenterClientUtils;
-//import service.middleware.linkage.framework.access.domain.ServiceInformation;
+//import service.middleware.linkage.center.client.ServiceCenterCommonRepository;
+//import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;
 //import service.middleware.linkage.framework.bootstrap.NIOServerBootStrap;
 //
 //
@@ -17,7 +17,7 @@
 //    public static void main(String[] args) {
 //        try {
 //        	NIOServerBootStrap serviceBootStrap = new NIOServerBootStrap("conf/service_server.properties", 5);
-//        	ServiceInformation centerServiceInformation = new ServiceInformation();
+//        	ServiceRegisterEntry centerServiceInformation = new ServiceRegisterEntry();
 //        	centerServiceInformation.setAddress("localhost");
 //        	centerServiceInformation.setPort(5002);
 //        	NIOCenterClientBootStrap clientBootStrap = new NIOCenterClientBootStrap("conf/service_client.properties",
@@ -25,9 +25,9 @@
 //    		serviceBootStrap.run();
 //    		clientBootStrap.run();
 //    		clientBootStrap.getEventDistributionMaster().addHandler(new FileHandler());
-//    		ServiceCenterClientUtils.defaultRouteConsume = clientBootStrap.getServiceAccess();
+//    		ServiceCenterCommonRepository.defaultRouteConsume = clientBootStrap.getServiceAccess();
 //    		try {
-//    			ServiceCenterClientUtils.registerServiceList(ServiceCenterClientUtils.defaultRouteConsume, centerServiceInformation, serviceBootStrap.getServicePropertyEntity());
+//    			ServiceCenterCommonRepository.registerServiceList(ServiceCenterCommonRepository.defaultRouteConsume, centerServiceInformation, serviceBootStrap.getServicePropertyEntity());
 //    		}
 //    		catch (Exception e) {
 //

@@ -1,3 +1,6 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 //package service.middleware.linkage.center.client;
 //
 //import org.slf4j.Logger;
@@ -7,7 +10,7 @@
 //import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
 //import service.middleware.linkage.framework.exception.ServiceException;
 //import service.middleware.linkage.framework.access.ServiceAccess;
-//import service.middleware.linkage.framework.access.domain.ServiceInformation;
+//import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;
 //import service.middleware.linkage.framework.setting.ServiceSettingEntity;
 //import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
 //
@@ -22,30 +25,29 @@
 // * @author Smile
 // *
 // */
-//public final class ServiceCenterClientUtils {
-//	private static Logger logger = LoggerFactory.getLogger(ServiceCenterClientUtils.class);
+//public final class ServiceCenterCommonRepository {
+//    private static Logger logger = LoggerFactory.getLogger(ServiceCenterCommonRepository.class);
 //
-//	public static NIORouteServiceAccess defaultRouteConsume = null;
 //
-//	// the service center side
-//	public static final String SERVICE_CENTER_SERVICE_NAME   				= "serviceCenter";
-//	public static final String SERVICE_CENTER_REGISTER_ID    				= "serviceCenterRegister";
-//	public static final String SERVICE_CENTER_UNREGISTER_ID 				= "serviceCenterUnregister";
-//	public static final String SERVICE_CENTER_GET_SERVICE_ID 				= "serviceCenterGetServiceList";
-//	public static final String SERVICE_CENTER_REGISTER_CLIENT_ID    		= "serviceCenterRegisterClient";
+//    // the service center side
+//    public static final String SERVICE_CENTER_SERVICE_NAME = "serviceCenter";
+//    public static final String SERVICE_CENTER_REGISTER_ID = "serviceCenterRegister";
+//    public static final String SERVICE_CENTER_UNREGISTER_ID = "serviceCenterUnregister";
+//    public static final String SERVICE_CENTER_GET_SERVICE_ID = "serviceCenterGetServiceList";
+//    public static final String SERVICE_CENTER_REGISTER_CLIENT_ID = "serviceCenterRegisterClient";
 //
-//	// the service center client side
-//	public static final String SERVICE_CENTER_CLIENT_SERVICE_NAME			= "serviceCenterClientService";
-//	public static final String SERVICE_CENTER_CLIENT_SERVICE_REMOVE 		= "serviceCenterClientServiceRemove";
-//	public static final String SERVICE_CENTER_CLIENT_SERVICE_ADD 			= "serviceCenterClientServiceAdd";
-//
+//    // the service center client side
+//    public static final String SERVICE_CENTER_CLIENT_SERVICE_NAME = "serviceCenterClientService";
+//    public static final String SERVICE_CENTER_CLIENT_SERVICE_REMOVE = "serviceCenterClientServiceRemove";
+//    public static final String SERVICE_CENTER_CLIENT_SERVICE_ADD = "serviceCenterClientServiceAdd";
+//}
 //	/**
 //	 * invoke the client service method
-//	 * @param serviceInformationList
+//	 * @param SERVICE_REGISTER_ENTRY_LIST
 //	 * @throws ServiceException
 //	 */
-//	public static boolean notifyClientServiceAdd(ServiceAccess consume, ServiceInformation clientServiceInformation, List<ServiceInformation> serviceInformationList ) throws ServiceException{
-//		String strServiceInformation = ServiceCenterUtils.serializeServiceInformationList(serviceInformationList);
+//	public static boolean notifyClientServiceAdd(ServiceAccess consume, ServiceRegisterEntry clientServiceInformation, List<ServiceRegisterEntry> SERVICE_REGISTER_ENTRY_LIST ) throws ServiceException{
+//		String strServiceInformation = ServiceCenterUtils.serializeServiceInformationList(SERVICE_REGISTER_ENTRY_LIST);
 //		List<Object> args = new LinkedList<Object>();
 //		args.add(strServiceInformation);
 //		List<Class<?>> argTypes = new LinkedList<>();
@@ -67,8 +69,8 @@
 //	 * @return
 //	 * @throws ServiceException
 //	 */
-//	public static boolean registerClientInformation(ServiceAccess consume, ServiceInformation centerServiceInformation,
-//			ServiceInformation clientServiceInformation) throws ServiceException{
+//	public static boolean registerClientInformation(ServiceAccess consume, ServiceRegisterEntry centerServiceInformation,
+//			ServiceRegisterEntry clientServiceInformation) throws ServiceException{
 //		String strServiceInformation = ServiceCenterUtils.serializeServiceInformation(clientServiceInformation);
 //		List<Object> args = new LinkedList<Object>();
 //		args.add(strServiceInformation);
@@ -88,8 +90,8 @@
 //	 * @return
 //	 * @throws ServiceException
 //	 */
-//	public static boolean registerServiceList(ServiceAccess consume, ServiceInformation centerServiceInformation, ServiceSettingReader workingServicePropertyEntity) throws ServiceException{
-//		List<ServiceInformation> serviceInformationList = new LinkedList<ServiceInformation>();
+//	public static boolean registerServiceList(ServiceAccess consume, ServiceRegisterEntry centerServiceInformation, ServiceSettingReader workingServicePropertyEntity) throws ServiceException{
+//		List<ServiceRegisterEntry> SERVICE_REGISTER_ENTRY_LIST = new LinkedList<ServiceRegisterEntry>();
 //
 //		//��ȡ���з��񣬽�����ע�ᵽע������
 //		List<ServiceSettingEntity> serviceList = workingServicePropertyEntity.getServiceList();
@@ -100,13 +102,13 @@
 //				Class interfaceclass = Class.forName(interfaceName);
 //				Method[] methods = interfaceclass.getMethods();
 //				for(int i = 0; i < methods.length; i++){
-//					ServiceInformation subServiceInformation = new ServiceInformation();
+//					ServiceRegisterEntry subServiceInformation = new ServiceRegisterEntry();
 //					subServiceInformation.setAddress(workingServicePropertyEntity.getServiceAddress());
 //					subServiceInformation.setPort(workingServicePropertyEntity.getServicePort());
 //					subServiceInformation.setServiceMethod(methods[i].getName());
 //					subServiceInformation.setServiceName(serviceEntity.getServiceName());
 //					subServiceInformation.setServiceVersion(serviceEntity.getServiceVersion());
-//					serviceInformationList.add(subServiceInformation);
+//					SERVICE_REGISTER_ENTRY_LIST.add(subServiceInformation);
 //					logger.debug("service name : " + serviceEntity.getServiceName() + " method name : " + methods[i].getName());
 //				}
 //			} catch (ClassNotFoundException e) {
@@ -114,12 +116,12 @@
 //			}
 //
 //		}
-//		String strServiceInformation = ServiceCenterUtils.serializeServiceInformationList(serviceInformationList);
+//		String strServiceInformation = ServiceCenterUtils.serializeServiceInformationList(SERVICE_REGISTER_ENTRY_LIST);
 //		List<Object> args = new LinkedList<>();
 //		args.add(strServiceInformation);
 //		List<Class<?>> argTypes = new LinkedList<>();
 //		argTypes.add(String.class);
-//		ServiceRequestResult result = consume.requestServicePerConnectSync(ServiceCenterClientUtils.SERVICE_CENTER_REGISTER_ID, args, argTypes, centerServiceInformation);
+//		ServiceRequestResult result = consume.requestServicePerConnectSync(ServiceCenterCommonRepository.SERVICE_CENTER_REGISTER_ID, args, argTypes, centerServiceInformation);
 //		if(result.isException()){
 //			result.getException().printStackTrace();
 //			throw result.getException();

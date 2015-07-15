@@ -1,75 +1,31 @@
-//package service.middleware.linkage.center.serviceaccess;
-//
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import service.middleware.linkage.center.route.Route;
-//import service.middleware.linkage.center.route.ServiceCenterRoute;
-//import service.middleware.linkage.framework.access.domain.ServiceInformation;
-//import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
-//import service.middleware.linkage.framework.exception.ServiceException;
-//import service.middleware.linkage.framework.io.WorkerPool;
-//import service.middleware.linkage.framework.access.impl.ServiceAccessImpl;
-//import service.middleware.linkage.framework.access.domain.ServiceRequest;
-//import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
-//import service.middleware.linkage.framework.utils.StringUtils;
-//
-//import java.util.List;
-//
-//public class NIORouteServiceAccess extends ServiceAccessImpl implements RouteServiceAccess {
-//	private final Route route;
-//	private static Logger logger = LoggerFactory.getLogger(NIORouteServiceAccess.class);
-//	public NIORouteServiceAccess(ClientSettingReader workingClientPropertyEntity, WorkerPool workerPool, ServiceInformation centerServiceInformation) {
-//		super(workingClientPropertyEntity, workerPool);
-//		this.route = new ServiceCenterRoute(centerServiceInformation, this);
-//	}
-//
-//	@Override
-//	public ServiceRequestResult requestService(String clientID, List<Object> args, List<Class<?>> argTypes) {
-//		return requestService(clientID, args, argTypes, true);
-//	}
-//
-//	@Override
-//	public ServiceRequestResult requestService(String clientID,
-//			List<Object> args, List<Class<?>> argTypes, boolean channelFromCached) {
-//		final ServiceRequest objRequestEntity = serviceEngine.createRequestEntity(clientID, args, argTypes);
-//        ServiceRequestResult result = new ServiceRequestResult();
-//        result.setRequestID(objRequestEntity.getRequestID());
-//    	// Find the service information from the route, set the information into the result domain as well
-//		ServiceInformation serviceInformation = null;
-//		try {
-//			serviceInformation = route.chooseRoute(objRequestEntity);
-//			result.setServiceInformation(serviceInformation);
-//			if(serviceInformation == null)
-//			{
-//				ServiceAccessImpl.setExceptionToRuquestResult(result, new ServiceException(new Exception("Can not find the service"), "Can not find the service"));
-//				return result;
-//			}
-//		}
-//		catch(Exception ex)
-//		{
-//			logger.error(StringUtils.ExceptionStackTraceToString(ex));
-//			//logger.log(Level.WARNING, ex.getMessage());
-//			//System.out.println("ComsumerBean ... exception happend " + ex.getMessage());
-//			//ex.printStackTrace();
-//			ServiceAccessImpl.setExceptionToRuquestResult(result, new ServiceException(ex, "ComsumerBean ... exception happend"));
-//        	route.clean(result);
-//        	return result;
-//        }
-//		return serviceEngine.requestService(objRequestEntity, result, serviceInformation, channelFromCached);
-//	}
-//
-//	@Override
-//	public ServiceRequestResult requestServicePerConnect(String clientID,
-//			List<Object> args, List<Class<?>> argTypes) {
-//		return requestService(clientID, args, argTypes, false);
-//	}
-//
-//	@Override
-//	public ServiceRequestResult requestServicePerConnectSync(String clientID,
-//			List<Object> args, List<Class<?>> argTypes) {
-//		ServiceRequestResult result = requestService(clientID, args, argTypes, false);
-//		result.getResponseEntity();
-//		this.closeChannelByRequestResult(result);
-//		return result;
-//	}
-//}
+package service.middleware.linkage.center.serviceaccess;
+
+import service.middleware.linkage.center.route.ServiceCenterRoute;
+import service.middleware.linkage.framework.access.RequestCallback;
+import service.middleware.linkage.framework.access.ServiceAccess;
+import service.middleware.linkage.framework.access.domain.ServiceParameter;
+import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;
+import service.middleware.linkage.framework.access.domain.ServiceRequest;
+
+import java.util.List;
+
+public class NIORouteServiceAccess implements RouteServiceAccess {
+    private final ServiceAccess serviceAccess;
+    private final ServiceCenterRoute serviceCenterRoute;
+
+    public NIORouteServiceAccess(ServiceAccess serviceAccess, ServiceCenterRoute serviceCenterRoute) {
+        this.serviceAccess = serviceAccess;
+        this.serviceCenterRoute = serviceCenterRoute;
+    }
+
+    @Override
+    public void requestService(String clientID, List<ServiceParameter> parameters, RequestCallback requestCallback) {
+        ServiceRequest serviceRequest = serviceAccess.createRequestEntity(clientID, parameters);
+        ServiceRegisterEntry serviceRegisterEntry = serviceCenterRoute.chooseRouteByServiceName(serviceRequest.getServiceName());
+        if(serviceRegisterEntry == null)
+        {
+            requestCallback.runException(new Exception("cannot find the service from the service center."));
+        }
+        serviceAccess.requestService(serviceRegisterEntry.getAddress(), serviceRegisterEntry.getPort(), clientID, parameters, requestCallback);
+    }
+}

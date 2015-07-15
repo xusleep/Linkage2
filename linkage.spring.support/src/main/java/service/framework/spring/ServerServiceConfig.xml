@@ -36,7 +36,7 @@
 	</property>
 </bean>
 <bean id="calculatorImpl" class="test.service.CalculatorImpl"></bean>
-<bean id="centerServiceInformation" class="servicecenter.service.ServiceInformation">
+<bean id="centerServiceRegisterEntry" class="servicecenter.service.ServiceInformation">
 	<property name="address">
 		<value>localhost</value>
 	</property>
@@ -46,7 +46,7 @@
 </bean>
 <!-- 设置连接到注册中心的配置 -->
 <bean id="linkToServiceCenter" class="service.framework.io.client.comsume.ConsumerBean">
-	<property name="route">
+	<property name="multiConnectionRoute">
 		<ref bean="linkedToServiceCenterInform"></ref>
 	</property>
 	<property name="workerPool">
@@ -66,7 +66,7 @@
 	</property>
 </bean>
 <!-- 设置连接到服务器注册中心的路由 -->
-<bean id="linkedToServiceCenterInform" class="service.framework.route.DefaultRoute">
+<bean id="linkedToServiceCenterInform" class="service.framework.multiConnectionRoute.DefaultRoute">
 	<property name="serviceList">
 		<list>
 			<bean class="servicecenter.service.ServiceInformation">

@@ -14,12 +14,19 @@ public class ServiceRequest {
     private String methodName;
     private String version;
     private final String requestID;
-    private List<Object> args;
-    private List<String> argTypes;
+    private List<ServiceParameter> parameters;
     private String group;
 
     public ServiceRequest() {
         this.requestID = CommonUtils.generateId();
+    }
+
+    public List<ServiceParameter> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(List<ServiceParameter> parameters) {
+        this.parameters = parameters;
     }
 
     public String getRequestID() {
@@ -50,27 +57,11 @@ public class ServiceRequest {
         this.version = version;
     }
 
-    public List<Object> getArgs() {
-        return args;
-    }
-
-    public void setArgs(List<Object> args) {
-        this.args = args;
-    }
-
     public String getGroup() {
         return group;
     }
 
     public void setGroup(String group) {
         this.group = group;
-    }
-
-    public List<String> getArgTypes() {
-        return argTypes;
-    }
-
-    public void setArgTypes(List<String> argTypes) {
-        this.argTypes = argTypes;
     }
 }

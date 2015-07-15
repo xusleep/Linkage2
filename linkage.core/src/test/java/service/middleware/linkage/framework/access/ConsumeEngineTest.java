@@ -5,7 +5,7 @@
 //import org.junit.Test;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
-//import service.middleware.linkage.framework.access.domain.ServiceInformation;
+//import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;
 //import service.middleware.linkage.framework.access.domain.ServiceRequest;
 //import service.middleware.linkage.framework.bootstrap.NIOClientBootStrap;
 //import service.middleware.linkage.framework.bootstrap.NIOServerBootStrap;
@@ -49,13 +49,13 @@
 //            ServiceRequest objRequestEntity = clientBootStrap.getServiceAccess().getServiceAccessEngine().createRequestEntity("calculator", args, argTypes);
 //            ServiceRequestResult result = new ServiceRequestResult();
 //            result.setRequestID(objRequestEntity.getRequestID());
-//            ServiceInformation serviceInformation = new ServiceInformation();
+//            ServiceRegisterEntry serviceInformation = new ServiceRegisterEntry();
 //            serviceInformation.setAddress(serviceBootStrap.getServicePropertyEntity().getServiceAddress());
 //            serviceInformation.setPort(serviceBootStrap.getServicePropertyEntity().getServicePort());
 //            result = clientBootStrap.getServiceAccess().getServiceAccessEngine().requestService(objRequestEntity, result, serviceInformation, false);
 //            assertTrue("Exception happen when request , exception: " + (result.isException() ? result.getException().getMessage() : ""), !result.isException());
-//            assertTrue("result not right, 121 + 234 = 355, the result is " + result.getResponseEntity().getResult(),
-//                    result.getResponseEntity().getResult().equals("355"));
+//            assertTrue("result not right, 121 + 234 = 355, the result is " + result.getResponseEntity().getJsonResult(),
+//                    result.getResponseEntity().getJsonResult().equals("355"));
 //        }
 //    }
 //
@@ -131,12 +131,12 @@
 //            ServiceRequest objRequestEntity = clientBootStrap.getServiceAccess().getServiceAccessEngine().createRequestEntity("calculator", args, argTypes);
 //            ServiceRequestResult result = new ServiceRequestResult();
 //            result.setRequestID(objRequestEntity.getRequestID());
-//            ServiceInformation serviceInformation = new ServiceInformation();
+//            ServiceRegisterEntry serviceInformation = new ServiceRegisterEntry();
 //            serviceInformation.setAddress(serviceBootStrap.getServicePropertyEntity().getServiceAddress());
 //            serviceInformation.setPort(serviceBootStrap.getServicePropertyEntity().getServicePort());
 //            result = clientBootStrap.getServiceAccess().getServiceAccessEngine().requestService(objRequestEntity, result, serviceInformation, isCachingChannel);
 //            assertTrue("Exception happen when request , exception: " + (result.isException() ? result.getException().getMessage() : ""), !result.isException());
-//            assertTrue(String.format("result not right, %s + %s = %s, the result is %s", value1, value2, resultValue, result.getResponseEntity().getResult()), result.getResponseEntity().getResult().equals("" + resultValue));
+//            assertTrue(String.format("result not right, %s + %s = %s, the result is %s", value1, value2, resultValue, result.getResponseEntity().getJsonResult()), result.getResponseEntity().getJsonResult().equals("" + resultValue));
 //        }
 //
 //        @Override

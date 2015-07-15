@@ -5,6 +5,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,6 +27,11 @@ public class JsonUtils {
 
     public static String toJson(Object obj) {
         return gson.toJson(obj);
+    }
+
+
+    public static <T> T fromJson(String json){
+        return gson.fromJson(json, new TypeToken<T>(){}.getType());
     }
 
     public static <T> T fromJson(String json, Class<T> type) {

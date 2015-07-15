@@ -6,7 +6,7 @@
 <!-- 定义一些启动参数 -->
 <!-- <bean id=""></bean> -->
 <bean id="addService" class="service.framework.io.client.comsume.ConsumerBean">
-	<property name="route">
+	<property name="multiConnectionRoute">
 		<ref bean="linkedToServiceDirectly"></ref>
 	</property>
 	<property name="workerPool">
@@ -26,19 +26,19 @@
 	</property>
 </bean>
 <!-- 设置客户端连接路由，该路由将从服务中心取得服务列表，并从服务列表中获得一个服务 -->
-<bean id="clientRoute" class= "service.framework.route.ClientRoute">
+<bean id="clientRoute" class= "service.framework.multiConnectionRoute.ClientRoute">
 	<property name="serviceCenterConsumerBean">
 		<ref bean="linkedToServiceCenterCB"></ref>
 	</property>
 	<property name="filters">
 		<list>
-			<bean class="service.framework.route.filters.ClientRouteFilter"></bean>
+			<bean class="service.framework.multiConnectionRoute.filters.ClientRouteFilter"></bean>
 		</list>
 	</property>
 </bean>
 <!-- 设置连接到注册中心的配置 -->
 <bean id="linkedToServiceCenterCB" class="service.framework.io.client.comsume.ConsumerBean">
-	<property name="route">
+	<property name="multiConnectionRoute">
 		<ref bean="linkedToServiceCenter"></ref>
 	</property>
 	<property name="workerPool">
@@ -57,7 +57,7 @@
 		<value>test</value>
 	</property>
 </bean>
-<bean id="linkedToServiceCenter" class="service.framework.route.DefaultRoute">
+<bean id="linkedToServiceCenter" class="service.framework.multiConnectionRoute.DefaultRoute">
 	<property name="serviceList">
 		<list>
 			<bean class="servicecenter.service.ServiceInformation">
@@ -71,7 +71,7 @@
 		</list>
 	</property>
 </bean>
-<bean id="linkedToServiceDirectly" class="service.framework.route.DefaultRoute">
+<bean id="linkedToServiceDirectly" class="service.framework.multiConnectionRoute.DefaultRoute">
 	<property name="serviceList">
 		<list>
 			<bean class="servicecenter.service.ServiceInformation">
@@ -85,7 +85,7 @@
 		</list>
 	</property>
 </bean>
-<bean id="linkedToService" class="service.framework.route.DefaultRoute">
+<bean id="linkedToService" class="service.framework.multiConnectionRoute.DefaultRoute">
 	<property name="serviceList">
 		<list>
 			<bean class="servicecenter.service.ServiceInformation">
