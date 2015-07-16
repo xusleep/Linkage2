@@ -7,7 +7,7 @@
 //
 //import service.middleware.linkage.center.bootstrap.NIOCenterClientBootStrap;
 //import service.middleware.linkage.center.client.ServiceCenterCommonRepository;
-//import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
+//import service.middleware.linkage.center.access.impl.NIORouteServiceAccess;
 //import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;
 //import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
 //import service.middleware.linkage.framework.bootstrap.NIOServerBootStrap;

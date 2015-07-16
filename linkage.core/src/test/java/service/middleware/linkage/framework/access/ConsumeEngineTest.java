@@ -28,9 +28,9 @@
 //    @BeforeClass
 //    public static void setUp() {
 //        try {
-//            serviceBootStrap = new NIOServerBootStrap("service/middleware/linkage/framework/serviceaccess/conf/service_server.properties", 5);
+//            serviceBootStrap = new NIOServerBootStrap("service/middleware/linkage/framework/access/conf/service_server.properties", 5);
 //            serviceBootStrap.run();
-//            clientBootStrap = new NIOClientBootStrap("service/middleware/linkage/framework/serviceaccess/conf/client_client.properties", 1);
+//            clientBootStrap = new NIOClientBootStrap("service/middleware/linkage/framework/access/conf/client_client.properties", 1);
 //            clientBootStrap.run();
 //        } catch (Exception e) {
 //

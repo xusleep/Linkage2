@@ -7,7 +7,7 @@
 //import java.util.concurrent.atomic.AtomicInteger;
 //
 //import service.middleware.linkage.center.bootstrap.NIOCenterClientBootStrap;
-//import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
+//import service.middleware.linkage.center.access.impl.NIORouteServiceAccess;
 //import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
 //import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;
 //import test.framework.concurrence.condition.MainConcurrentThread;

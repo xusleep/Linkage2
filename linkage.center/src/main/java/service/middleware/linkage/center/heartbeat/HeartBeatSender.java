@@ -2,7 +2,7 @@
 //
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
-//import service.middleware.linkage.center.ServiceCenter;
+//import service.middleware.linkage.center.center.ServiceCenter;
 //import service.middleware.linkage.framework.access.ServiceAccess;
 //import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
 //import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;

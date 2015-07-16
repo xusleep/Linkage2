@@ -20,46 +20,60 @@ public class ServiceJsonUtils {
 
     static {
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(ServiceRequest.class, new JsonDeserializer<ServiceRequest>() {
+        gsonBuilder.registerTypeAdapter(Class.class, new JsonDeserializer<Class>() {
+            @Override
+            public Class deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext
+                    jsonDeserializationContext) throws JsonParseException {
+                try {
+                    Class t = Class.forName(jsonElement.getAsString());
+                    return t;
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        });
+        gsonBuilder.registerTypeAdapter(Class.class, new JsonSerializer<Class>() {
+            @Override
+            public JsonElement serialize(Class aClass, Type type, JsonSerializationContext jsonSerializationContext) {
+                return new JsonPrimitive(aClass.getName());
+            }
+        });
+        gsonBuilder.registerTypeAdapter(ServiceParameter.class, new JsonDeserializer<ServiceParameter>() {
                     @Override
-                    public ServiceRequest deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext
+                    public ServiceParameter deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext
                             jsonDeserializationContext) throws JsonParseException {
-                        ServiceRequest serviceRequestReturn = new ServiceRequest();
-                        serviceRequestReturn.setServiceName(jsonElement.getAsJsonObject().get("serviceName").getAsString());
-                        serviceRequestReturn.setMethodName(jsonElement.getAsJsonObject().get("methodName").getAsString());
-                        serviceRequestReturn.setVersion(jsonElement.getAsJsonObject().get("version").getAsString());
-                        serviceRequestReturn.setGroup(jsonElement.getAsJsonObject().get("group").getAsString());
-                        serviceRequestReturn.setRequestID(jsonElement.getAsJsonObject().get("requestID").getAsString());
-                        JsonArray jsonArrayArgs = (JsonArray) jsonElement.getAsJsonObject().get("serviceParameters");
-                        List<ServiceParameter> parameterList = new LinkedList<ServiceParameter>();
-                        serviceRequestReturn.setServiceParameters(parameterList);
-                        for (int i = 0; i < jsonArrayArgs.size(); i++) {
-                            JsonObject jsonObject = jsonArrayArgs.get(i).getAsJsonObject();
+                        try {
+                            ServiceParameter serviceParameter = null;
+                            JsonObject jsonObject = jsonElement.getAsJsonObject();
                             String name = jsonObject.get("name").getAsString();
                             String type1 = jsonObject.get("type").getAsString();
-                            if (type1.contains("int")) {
-                                parameterList.add(new ServiceParameter(name, type1, jsonObject.get("value").getAsInt()));
-                            } else if (type1.contains("Integer")) {
-                                parameterList.add(new ServiceParameter(name, type1, jsonObject.get("value").getAsInt()));
-                            } else if (type1.contains("String")) {
-                                parameterList.add(new ServiceParameter(name, type1, jsonObject.get("value").getAsString()));
-                            } else if (type1.contains("Double")) {
-                                parameterList.add(new ServiceParameter(name, type1, jsonObject.get("value").getAsDouble()));
+                            if (type1.equals(int.class.getName())) {
+                                serviceParameter = new ServiceParameter(name, int.class, jsonObject.get("value").getAsInt());
+                            } else if (type1.equals(Integer.class.getName())) {
+                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsInt());
+                            } else if (type1.equals(String.class.getName())) {
+                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsString());
+                            } else if (type1.equals(Double.class.getName())) {
+                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsDouble());
                             } else if (type1.contains("double")) {
-                                parameterList.add(new ServiceParameter(name, type1, jsonObject.get("value").getAsDouble()));
+                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsDouble());
                             } else if (type1.contains("Long")) {
-                                parameterList.add(new ServiceParameter(name, type1, jsonObject.get("value").getAsLong()));
+                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsLong());
                             } else if (type1.contains("long")) {
-                                parameterList.add(new ServiceParameter(name, type1, jsonObject.get("value").getAsLong()));
+                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsLong());
                             } else if (type1.contains("Float")) {
-                                parameterList.add(new ServiceParameter(name, type1, jsonObject.get("value").getAsFloat()));
+                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsFloat());
                             } else if (type1.contains("float")) {
-                                parameterList.add(new ServiceParameter(name, type1, jsonObject.get("value").getAsFloat()));
+                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsFloat());
                             } else {
-                                parameterList.add(new ServiceParameter(name, type1, jsonObject.get("value").getAsString()));
+                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsString());
                             }
+                            return serviceParameter;
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
                         }
-                        return serviceRequestReturn;
+                        return null;
                     }
                 }
 
@@ -166,5 +180,10 @@ public class ServiceJsonUtils {
             }
         }
         return types;
+    }
+
+    public static void main(String[] args) {
+        ServiceRequest request = new ServiceRequest();
+        request.set
     }
 }

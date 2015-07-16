@@ -8,9 +8,9 @@ public class ServiceParameter {
     private String type;
     private Object value;
 
-    public ServiceParameter(String name, String type, Object value) {
+    public ServiceParameter(String name, Class type, Object value) {
         this.name = name;
-        this.type = type;
+        this.type = type.getName();
         this.value = value;
     }
 

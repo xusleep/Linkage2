@@ -1,7 +1,8 @@
 package service.middleware.linkage.center.bootstrap;
 
-import service.middleware.linkage.center.route.DefaultServiceCenterRoute;
-import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
+import service.middleware.linkage.center.access.RouteServiceAccess;
+import service.middleware.linkage.center.access.impl.NIORouteServiceAccess;
+import service.middleware.linkage.center.route.impl.DefaultServiceCenterRoute;
 import service.middleware.linkage.framework.access.ServiceAccess;
 import service.middleware.linkage.framework.access.impl.ServiceAccessImpl;
 import service.middleware.linkage.framework.bootstrap.AbstractBootStrap;
@@ -25,7 +26,7 @@ import java.io.IOException;
  */
 public class NIOCenterClientBootStrap extends AbstractBootStrap implements Runnable {
     private final Client client;
-    private final NIORouteServiceAccess serviceAccess;
+    private final RouteServiceAccess serviceAccess;
 
     /**
      * @param propertyPath             the property configured for the client
@@ -54,7 +55,7 @@ public class NIOCenterClientBootStrap extends AbstractBootStrap implements Runna
      *
      * @return
      */
-    public NIORouteServiceAccess getServiceAccess() {
+    public RouteServiceAccess getServiceAccess() {
         return serviceAccess;
     }
 

@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 //import service.middleware.linkage.center.common.ServiceCenterUtils;
-//import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
+//import service.middleware.linkage.center.access.impl.NIORouteServiceAccess;
 //import service.middleware.linkage.framework.access.domain.ServiceRequestResult;
 //import service.middleware.linkage.framework.exception.ServiceException;
 //import service.middleware.linkage.framework.access.ServiceAccess;

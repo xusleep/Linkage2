@@ -47,8 +47,8 @@ public class StartClientMoreConnection extends AbstractJob {
 		{
 			//System.out.println("request count ..." + requestCount.incrementAndGet());
 	    	List<ServiceParameter> args1 = new LinkedList<ServiceParameter>();
-	    	args1.add(new ServiceParameter("a", "int", requestCount.incrementAndGet()));
-	    	args1.add(new ServiceParameter("b", "int", aint.incrementAndGet()));
+	    	args1.add(new ServiceParameter("a", int.class, requestCount.incrementAndGet()));
+	    	args1.add(new ServiceParameter("b", int.class, aint.incrementAndGet()));
             cb.requestService("localhost", 5003, "calculator", args1, new RequestCallback() {
                 @Override
                 public void runCallback(String serviceResponse) {
