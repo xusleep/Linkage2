@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.middleware.linkage.framework.access.domain.ServiceRequest;
 import service.middleware.linkage.framework.access.domain.ServiceResponse;
+import service.middleware.linkage.framework.serialization.ServiceJsonUtils;
 import service.middleware.linkage.framework.setting.ServiceSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ServiceSettingReader;
 
@@ -50,12 +51,12 @@ public class DefaultServiceProvider implements ServiceProvider {
         try {
             Class clazz = Class.forName(entity.getServiceInterface());
 
-            Method findMethod = clazz.getMethod(request.getMethodName(), new Class<?>[]{String.class, String.class});
+            Method findMethod = clazz.getMethod(request.getMethodName(), ServiceJsonUtils.getParameterTypes(request.getServiceParameters()));
 
             if (findMethod != null) {
-                Object result = findMethod.invoke(entity.getServiceTargetObject(), new Object[]{"1", "2"});
+                Object result = findMethod.invoke(entity.getServiceTargetObject(), ServiceJsonUtils.getParameterValues(request.getServiceParameters()));
                 ServiceResponse response = new ServiceResponse();
-                response.setJsonResult(JsonUtils.toJson(result));
+                response.setJsonResult(ServiceJsonUtils.serializeResult(result));
                 response.setRequestID(request.getRequestID());
                 return response;
             }

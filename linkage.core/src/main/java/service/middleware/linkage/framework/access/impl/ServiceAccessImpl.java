@@ -12,7 +12,7 @@ import service.middleware.linkage.framework.io.nio.strategy.mixed.events.Service
 import service.middleware.linkage.framework.repository.domain.WorkingChannelStoreBean;
 import service.middleware.linkage.framework.route.MultiConnectionRoute;
 import service.middleware.linkage.framework.route.impl.DefaultMultiConnectionRoute;
-import service.middleware.linkage.framework.serialization.SerializationUtils;
+import service.middleware.linkage.framework.serialization.ServiceJsonUtils;
 import service.middleware.linkage.framework.setting.ClientSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
 
@@ -78,7 +78,7 @@ public class ServiceAccessImpl implements ServiceAccess {
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }
-        String sendData = SerializationUtils.serializeRequest(objRequestEntity);
+        String sendData = ServiceJsonUtils.serializeRequest(objRequestEntity);
         ServiceOnMessageDataWriteEvent objServiceOnMessageWriteEvent;
         logger.debug("request: " + sendData);
         objServiceOnMessageWriteEvent = new ServiceOnMessageDataWriteEvent(workingChannel, sendData);
@@ -100,7 +100,7 @@ public class ServiceAccessImpl implements ServiceAccess {
         objRequestEntity.setMethodName(objServiceClientEntity.getServiceMethod());
         objRequestEntity.setGroup(objServiceClientEntity.getServiceGroup());
         objRequestEntity.setServiceName(objServiceClientEntity.getServiceName());
-        objRequestEntity.setParameters(parameters);
+        objRequestEntity.setServiceParameters(parameters);
         objRequestEntity.setVersion(objServiceClientEntity.getServiceVersion());
         return objRequestEntity;
     }

@@ -10,6 +10,7 @@ import service.middleware.linkage.framework.access.RequestCallback;
 import service.middleware.linkage.framework.access.ServiceAccess;
 import service.middleware.linkage.framework.access.domain.ServiceParameter;
 import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;
+import service.middleware.linkage.framework.serialization.ServiceJsonUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -44,7 +45,7 @@ public class DefaultServiceCenterRoute implements ServiceCenterRoute {
 //                                Gson gson = new Gson();
 //                                List<ServiceRegisterEntry> registerEntryList =
 //                                        gson.fromJson(jsonResult, new TypeToken<List<ServiceRegisterEntry>>(){}.getType());
-                                List<ServiceRegisterEntry> registerEntryList = JsonUtils.fromJson(jsonResult);
+                                List<ServiceRegisterEntry> registerEntryList = ServiceJsonUtils.deserializeResult(jsonResult, List.class);
                                 ServiceRegisterRepository.addServiceInformationList(registerEntryList);
                             }
                             arrived.countDown();

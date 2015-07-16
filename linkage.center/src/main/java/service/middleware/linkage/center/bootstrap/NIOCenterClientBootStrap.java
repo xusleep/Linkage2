@@ -1,7 +1,10 @@
 package service.middleware.linkage.center.bootstrap;
 
+import service.middleware.linkage.center.route.DefaultServiceCenterRoute;
 import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
+import service.middleware.linkage.framework.access.ServiceAccess;
 import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;
+import service.middleware.linkage.framework.access.impl.ServiceAccessImpl;
 import service.middleware.linkage.framework.bootstrap.AbstractBootStrap;
 import service.middleware.linkage.framework.handlers.AccessClientHandler;
 import service.middleware.linkage.framework.handlers.DefaultEventDistributionMaster;
@@ -26,7 +29,7 @@ public class NIOCenterClientBootStrap extends AbstractBootStrap implements Runna
      * @param propertyPath             the property configured for the client
      * @param clientTaskThreadPootSize the client
      */
-    public NIOCenterClientBootStrap(String propertyPath, int clientTaskThreadPootSize, ServiceRegisterEntry centerServiceRegisterEntry) {
+    public NIOCenterClientBootStrap(String propertyPath, int clientTaskThreadPootSize, String centerAddress, int centerPort) {
         super(new DefaultEventDistributionMaster(clientTaskThreadPootSize));
         // read the configuration from the properties
         ClientSettingReader objServicePropertyEntity = null;
@@ -37,7 +40,8 @@ public class NIOCenterClientBootStrap extends AbstractBootStrap implements Runna
         }
         // this is a client, in this client it will be a gather place where we will start the worker pool & task handler
         this.client = new NIOClient(this.getWorkerPool());
-        this.serviceAccess = new NIORouteServiceAccess(objServicePropertyEntity, this.getWorkerPool(), centerServiceRegisterEntry);
+        ServiceAccess serviceAccess = new ServiceAccessImpl(objServicePropertyEntity);
+        this.serviceAccess = new NIORouteServiceAccess(serviceAccess, new DefaultServiceCenterRoute(serviceAccess, centerAddress, centerPort));
         this.getWorkerPool().getEventDistributionHandler().addHandler(new AccessClientHandler());
     }
 

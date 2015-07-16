@@ -29,9 +29,9 @@
 //		args.add("arg2&*^%");
 //		args.add("arg3");
 //		request.setArgs(args);
-//		String serializeStr = SerializationUtils.serializeRequest(request);
+//		String serializeStr = ServiceJsonUtils.serializeRequest(request);
 //		System.out.println("serializeStr : " + serializeStr);
-//		ServiceRequest result = SerializationUtils.deserializeRequest(serializeStr);
+//		ServiceRequest result = ServiceJsonUtils.deserializeRequest(serializeStr);
 //		assertTrue("result.getServiceName() not equals to <testServiceNmae> realvalue is " + result.getServiceName(),  result.getServiceName().equals("<testServiceNmae>"));
 //		assertTrue("result.getMethodName()  not equals to test23%^Method& realvalue is " + result.getMethodName(),  result.getMethodName().equals("test23%^Method&"));
 //		assertTrue("result.getGroup()       not equals to testGroup realvalue is " + result.getGroup(),  result.getGroup().equals("testGroup"));
@@ -49,9 +49,9 @@
 //		ServiceResponse response = new ServiceResponse();
 //		response.setRequestID("100001212");
 //		response.setJsonResult("sdsjdlfkj$@^!*#!4457@$$");
-//		String serializeStr = SerializationUtils.serializeResponse(response);
+//		String serializeStr = ServiceJsonUtils.serializeResponse(response);
 //		System.out.println("serializeStr : " + serializeStr);
-//		ServiceResponse result = SerializationUtils.deserializeResponse(serializeStr);
+//		ServiceResponse result = ServiceJsonUtils.deserializeResponse(serializeStr);
 //		assertTrue("result.getJsonResult() not equals to sdsjdlfkj$@^!*#!4457@$$ realvalue is " + result.getJsonResult(),  result.getJsonResult().equals("sdsjdlfkj$@^!*#!4457@$$"));
 //		assertTrue("result.setRequestID()   not equals to 100001212 realvalue is " + result.getRequestID(),  result.getRequestID().equals("100001212"));
 //	}

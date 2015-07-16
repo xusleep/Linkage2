@@ -1,5 +1,6 @@
 package test.run.withoutcenter;
 
+import clould.storage.service.utils.StringFileUtils;
 import service.middleware.linkage.framework.access.RequestCallback;
 import service.middleware.linkage.framework.access.ServiceAccess;
 import service.middleware.linkage.framework.access.domain.ServiceParameter;
@@ -48,7 +49,7 @@ public class StartClientMoreConnection extends AbstractJob {
 	    	args1.add(new ServiceParameter("b", "String", aint.incrementAndGet()));
             cb.requestService("localhost", 5003, "calculator", args1, new RequestCallback() {
                 @Override
-                public void runCallback(Object serviceResponse) {
+                public void runCallback(String serviceResponse) {
                     System.out.println("result is " + serviceResponse);
                 }
 

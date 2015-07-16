@@ -8,7 +8,7 @@ import service.middleware.linkage.framework.io.nio.strategy.mixed.events.Service
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataReceivedEvent;
 import service.middleware.linkage.framework.repository.WorkingChannelRepository;
 import service.middleware.linkage.framework.repository.domain.WorkingChannelStoreBean;
-import service.middleware.linkage.framework.serialization.SerializationUtils;
+import service.middleware.linkage.framework.serialization.ServiceJsonUtils;
 
 import java.io.IOException;
 
@@ -29,7 +29,7 @@ public class AccessClientHandler extends Handler {
             ServiceOnMessageDataReceivedEvent objServiceOnMessageDataReceivedEvent = (ServiceOnMessageDataReceivedEvent) event;
             String receiveData = objServiceOnMessageDataReceivedEvent.getMessageData();
             logger.debug("ServiceOnMessageDataReceivedEvent receive message : " + receiveData);
-            ServiceResponse objResponseEntity = SerializationUtils.deserializeResponse(receiveData);
+            ServiceResponse objResponseEntity = ServiceJsonUtils.deserializeResponse(receiveData);
             WorkingChannelStoreBean workingChannelStoreBean = WorkingChannelRepository.getWorkingChannelStoreBeanByChannelId(objServiceOnMessageDataReceivedEvent.getWorkingChannel().getId());
             RequestCallback requestCallback = workingChannelStoreBean.getRequestCallback(objResponseEntity.getRequestID());
             requestCallback.runCallback(objResponseEntity.getJsonResult());

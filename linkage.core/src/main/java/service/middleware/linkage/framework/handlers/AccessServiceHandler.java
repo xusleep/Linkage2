@@ -11,7 +11,7 @@ import service.middleware.linkage.framework.io.nio.strategy.mixed.events.Service
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataReceivedEvent;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataWriteEvent;
 import service.middleware.linkage.framework.provider.ServiceProvider;
-import service.middleware.linkage.framework.serialization.SerializationUtils;
+import service.middleware.linkage.framework.serialization.ServiceJsonUtils;
 
 import java.io.IOException;
 
@@ -34,10 +34,10 @@ public class AccessServiceHandler extends Handler {
             ServiceOnMessageDataReceivedEvent objServiceOnMessageDataReceivedEvent = (ServiceOnMessageDataReceivedEvent) event;
             WorkingChannelContext channel = objServiceOnMessageDataReceivedEvent.getWorkingChannel();
             NIOMessageStrategy strategy = (NIOMessageStrategy) channel.getWorkingChannelStrategy();
-            ServiceRequest objRequestEntity = SerializationUtils.deserializeRequest(objServiceOnMessageDataReceivedEvent.getMessageData());
+            ServiceRequest objRequestEntity = ServiceJsonUtils.deserializeRequest(objServiceOnMessageDataReceivedEvent.getMessageData());
             logger.debug("ServiceOnMessageDataReceivedEvent receive message : " + objServiceOnMessageDataReceivedEvent.getMessageData());
             ServiceResponse objResponseEntity = this.provider.acceptServiceRequest(objRequestEntity);
-            String responseStr = SerializationUtils.serializeResponse(objResponseEntity);
+            String responseStr = ServiceJsonUtils.serializeResponse(objResponseEntity);
             if (channel.getLinkageSocketChannel().isOpen()) {
                 logger.debug("ServiceOnMessageDataWriteEvent write back message : " + responseStr);
                 ServiceOnMessageDataWriteEvent objServiceOnMessageWriteEvent = new ServiceOnMessageDataWriteEvent(channel, new String(responseStr.getBytes("GBK"), EncodingUtils.FRAMEWORK_IO_ENCODING));
