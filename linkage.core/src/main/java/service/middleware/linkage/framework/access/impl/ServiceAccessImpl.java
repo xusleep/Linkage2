@@ -1,17 +1,19 @@
 package service.middleware.linkage.framework.access.impl;
 
+import linkage.common.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.middleware.linkage.framework.access.RequestCallback;
 import service.middleware.linkage.framework.access.ServiceAccess;
 import service.middleware.linkage.framework.access.domain.ServiceParameter;
 import service.middleware.linkage.framework.access.domain.ServiceRequest;
+import service.middleware.linkage.framework.io.WorkerPool;
 import service.middleware.linkage.framework.io.nio.NIOWorkingChannelContext;
+import service.middleware.linkage.framework.io.nio.connection.NIOConnectionManager;
+import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMessageStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.events.ServiceOnMessageDataWriteEvent;
 import service.middleware.linkage.framework.repository.domain.WorkingChannelStoreBean;
-import service.middleware.linkage.framework.route.MultiConnectionRoute;
-import service.middleware.linkage.framework.route.impl.DefaultMultiConnectionRoute;
 import service.middleware.linkage.framework.serialization.ServiceJsonUtils;
 import service.middleware.linkage.framework.setting.ClientSettingEntity;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
@@ -26,18 +28,12 @@ import java.util.List;
 public class ServiceAccessImpl implements ServiceAccess {
     private static Logger logger = LoggerFactory.getLogger(ServiceAccessImpl.class);
     private final ClientSettingReader workingClientPropertyEntity;
-    private final MultiConnectionRoute multiConnectionRoute;
+    private final NIOConnectionManager nioConnectionManager;
 
-    public ServiceAccessImpl(ClientSettingReader workingClientPropertyEntity) {
+    public ServiceAccessImpl(ClientSettingReader workingClientPropertyEntity, NIOConnectionManager nioConnectionManager) {
         this.workingClientPropertyEntity = workingClientPropertyEntity;
-        this.multiConnectionRoute = new DefaultMultiConnectionRoute();
+        this.nioConnectionManager = nioConnectionManager;
     }
-
-    public ServiceAccessImpl(ClientSettingReader workingClientPropertyEntity, MultiConnectionRoute multiConnectionRoute) {
-        this.workingClientPropertyEntity = workingClientPropertyEntity;
-        this.multiConnectionRoute = multiConnectionRoute;
-    }
-
     /**
      * search the configuration check the configure for the service
      *
@@ -71,11 +67,16 @@ public class ServiceAccessImpl implements ServiceAccess {
         NIOWorkingChannelContext workingChannel = null;
         NIOMessageStrategy strategy = null;
         try {
-            workingChannelStoreBean = multiConnectionRoute.chooseRoute(address, port);
+            workingChannelStoreBean = nioConnectionManager.connect(address, port);
+            if(workingChannelStoreBean == null){
+                requestCallback.runException(new Exception("can not create connection."));
+                return;
+            }
             workingChannel = (NIOWorkingChannelContext) workingChannelStoreBean.getWorkingChannelContext();
             workingChannelStoreBean.offerRequestResult(objRequestEntity.getRequestID(), requestCallback);
             strategy = (NIOMessageStrategy) workingChannel.getWorkingChannelStrategy();
         } catch (Exception ex) {
+            requestCallback.runException(ex);
             logger.error(ex.getMessage(), ex);
         }
         String sendData = ServiceJsonUtils.serializeRequest(objRequestEntity);
@@ -95,8 +96,9 @@ public class ServiceAccessImpl implements ServiceAccess {
      */
     @Override
     public ServiceRequest createRequestEntity(String clientID, List<ServiceParameter> parameters) {
-        final ServiceRequest objRequestEntity = new ServiceRequest();
+        ServiceRequest objRequestEntity = new ServiceRequest();
         ClientSettingEntity objServiceClientEntity = searchServiceClientEntity(clientID);
+        objRequestEntity.setRequestID(CommonUtils.generateId());
         objRequestEntity.setMethodName(objServiceClientEntity.getServiceMethod());
         objRequestEntity.setGroup(objServiceClientEntity.getServiceGroup());
         objRequestEntity.setServiceName(objServiceClientEntity.getServiceName());

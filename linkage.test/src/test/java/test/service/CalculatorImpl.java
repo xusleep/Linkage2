@@ -3,7 +3,7 @@ package test.service;
 public class CalculatorImpl implements Calculator {
 
 	@Override
-	public String add(String a, String b) {
+	public int add(int a, int b) {
 		try {
 			Thread.sleep(0);
 		} catch (InterruptedException e) {
@@ -11,7 +11,7 @@ public class CalculatorImpl implements Calculator {
 			e.printStackTrace();
 		}
 		// TODO Auto-generated method stub
-		return "" + (a + b);
+		return (a + b);
 	}
 
 	@Override

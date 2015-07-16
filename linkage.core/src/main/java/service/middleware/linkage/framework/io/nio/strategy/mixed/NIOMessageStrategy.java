@@ -117,12 +117,12 @@ public class NIOMessageStrategy extends WorkingChannelStrategy {
     public WorkingChannelOperationResult writeChannel() {
         ServiceOnMessageDataWriteEvent messageEvent;
         for (; ; ) {
-            if ((messageEvent = writeMessageQueue.poll()) == null) {
-                break;
-            }
-
             synchronized (this.getWorkingChannelContext().getLinkageSocketChannel().getWriteLock()) {
+                if ((messageEvent = writeMessageQueue.poll()) == null) {
+                    break;
+                }
                 if (this.getWorkingChannelContext().getLinkageSocketChannel().isOpen()) {
+                    //logger.debug("write message:" + messageEvent.getMessageData());
                     SocketChannel sc = this.getWorkingChannelContext().getLinkageSocketChannel().getSocketChannel();
                     byte[] data = null;
                     try {
@@ -146,8 +146,7 @@ public class NIOMessageStrategy extends WorkingChannelStrategy {
                         }
                     }
                 } else {
-                    logger.error("the channel is closed, exit the writting.");
-                    break;
+                    logger.error("the channel is closed, drop writting message:" + messageEvent.getMessageData());
                 }
             }
         }
@@ -165,7 +164,9 @@ public class NIOMessageStrategy extends WorkingChannelStrategy {
 
     @Override
     public void closeStrategy() {
-        this.writeMessageQueue.clear();
+        if(writeMessageQueue != null) {
+            this.writeMessageQueue.clear();
+        }
         this.writeMessageQueue = null;
         this.readBuffer = null;
     }

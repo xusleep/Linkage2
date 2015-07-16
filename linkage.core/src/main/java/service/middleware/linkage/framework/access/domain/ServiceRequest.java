@@ -1,5 +1,7 @@
 package service.middleware.linkage.framework.access.domain;
 
+import linkage.common.CommonUtils;
+
 import java.util.List;
 
 /**
@@ -11,12 +13,16 @@ public class ServiceRequest {
     private String serviceName;
     private String methodName;
     private String version;
-    private final String requestID;
+    private String requestID;
     private String group;
     private List<ServiceParameter> serviceParameters;
 
     public ServiceRequest() {
-        this.requestID = "test123214";
+
+    }
+
+    public void setRequestID(String requestID) {
+        this.requestID = requestID;
     }
 
     public String getRequestID() {

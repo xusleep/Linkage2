@@ -1,5 +1,6 @@
 package service.middleware.linkage.framework.repository;
 
+import linkage.common.CommonUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class WorkingChannelRepository {
      * add working channel entity
      * @param workingChannelStoreBean
      */
-    public static synchronized void addWorkingChannelStoreBean(WorkingChannelStoreBean workingChannelStoreBean){
+    public static void addWorkingChannelStoreBean(WorkingChannelStoreBean workingChannelStoreBean){
         WORKING_CHANNEL_STORE_BEAN_LIST.add(workingChannelStoreBean);
     }
 
@@ -30,7 +31,7 @@ public class WorkingChannelRepository {
      * add working channel entity list
      * @param workingChannelStoreBeanList
      */
-    public static synchronized void addWorkingChannelStoreBeanList(List<WorkingChannelStoreBean> workingChannelStoreBeanList){
+    public static void addWorkingChannelStoreBeanList(List<WorkingChannelStoreBean> workingChannelStoreBeanList){
         workingChannelStoreBeanList.addAll(workingChannelStoreBeanList);
     }
 
@@ -38,7 +39,7 @@ public class WorkingChannelRepository {
      * remove working channel entity
      * @param workingChannelStoreBean
      */
-    public static synchronized void removeWorkingChannelStoreBean(WorkingChannelStoreBean workingChannelStoreBean){
+    public static void removeWorkingChannelStoreBean(WorkingChannelStoreBean workingChannelStoreBean){
         WORKING_CHANNEL_STORE_BEAN_LIST.remove(workingChannelStoreBean);
     }
 
@@ -46,7 +47,7 @@ public class WorkingChannelRepository {
      * remove working channel entity
      * @param workingChannelStoreBeanList
      */
-    public static synchronized void removeWorkingChannelStoreBeanList(List<WorkingChannelStoreBean> workingChannelStoreBeanList){
+    public static void removeWorkingChannelStoreBeanList(List<WorkingChannelStoreBean> workingChannelStoreBeanList){
         workingChannelStoreBeanList.removeAll(workingChannelStoreBeanList);
     }
 
@@ -54,7 +55,7 @@ public class WorkingChannelRepository {
      * remove working channel entity by id
      * @param id
      */
-    public static synchronized void removeWorkingChannelStoreBean(String id){
+    public static void removeWorkingChannelStoreBean(String id){
         List<WorkingChannelStoreBean> workingChannelStoreBeanList = new LinkedList<>();
         for(WorkingChannelStoreBean workingChannelStoreBean : WorkingChannelRepository.WORKING_CHANNEL_STORE_BEAN_LIST){
             if(StringUtils.equals(workingChannelStoreBean.getWorkingChannelContext().getId(), id)){
@@ -69,7 +70,7 @@ public class WorkingChannelRepository {
      * @param id
      * @return
      */
-    public static synchronized WorkingChannelStoreBean getWorkingChannelStoreBeanByChannelId(String id){
+    public static WorkingChannelStoreBean getWorkingChannelStoreBeanByChannelId(String id){
         for(WorkingChannelStoreBean workingChannelStoreBean : WorkingChannelRepository.WORKING_CHANNEL_STORE_BEAN_LIST){
             if(StringUtils.equals(workingChannelStoreBean.getWorkingChannelContext().getId(), id)){
                 return workingChannelStoreBean;
@@ -80,18 +81,26 @@ public class WorkingChannelRepository {
 
     /**
      * »ñµÃworking channel
-     * @param id
+     * @param netKey
      * @return
      */
-    public static synchronized List<WorkingChannelStoreBean> getWorkingChannelStoreBeansByNetKey(String netKey){
+    public static List<WorkingChannelStoreBean> getWorkingChannelStoreBeansByNetKey(String netKey){
         List<WorkingChannelStoreBean> workingChannelStoreBeans = new LinkedList<>();
         for(WorkingChannelStoreBean workingChannelStoreBean : WorkingChannelRepository.WORKING_CHANNEL_STORE_BEAN_LIST){
             try {
                 SocketChannel socketChannel = workingChannelStoreBean.getWorkingChannelContext().getLinkageSocketChannel().getSocketChannel();
-                InetSocketAddress socketAddress = (InetSocketAddress)socketChannel.getRemoteAddress();
-                String key = socketAddress.getHostString() + "_" + socketAddress.getPort();
-                if (StringUtils.equals(key, netKey)) {
-                    workingChannelStoreBeans.add(workingChannelStoreBean);
+                if(workingChannelStoreBean.getWorkingChannelContext().getLinkageSocketChannel().isOpen()) {
+                    try {
+                        InetSocketAddress socketAddress = (InetSocketAddress) socketChannel.getRemoteAddress();
+                        if (StringUtils.equals(CommonUtils.getNetKey(socketAddress), netKey)) {
+                            workingChannelStoreBeans.add(workingChannelStoreBean);
+                        }
+                    }
+                    catch (Exception ex){
+                        logger.error(ex.getMessage(), ex);
+                    }
+                }else{
+                    logger.debug("channel is closed");
                 }
             }
             catch (Exception ex){

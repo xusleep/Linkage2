@@ -17,7 +17,7 @@ public class ServiceRegisterRepository {
      * add the service information domain to the repository
      * @param objServiceRegisterEntry
      */
-    public static synchronized void addServiceInformation(ServiceRegisterEntry objServiceRegisterEntry){
+    public static void addServiceInformation(ServiceRegisterEntry objServiceRegisterEntry){
         if(objServiceRegisterEntry != null)
             serviceListCache.add(objServiceRegisterEntry);
     }
@@ -26,7 +26,7 @@ public class ServiceRegisterRepository {
      * add the service information domain to the repository
      * @param objServiceRegisterEntryList
      */
-    public static synchronized void addServiceInformationList(List<ServiceRegisterEntry> objServiceRegisterEntryList){
+    public static void addServiceInformationList(List<ServiceRegisterEntry> objServiceRegisterEntryList){
         if(objServiceRegisterEntryList != null)
             serviceListCache.addAll(objServiceRegisterEntryList);
     }
@@ -35,7 +35,7 @@ public class ServiceRegisterRepository {
      * remove the service information domain from the repository
      * @param objServiceRegisterEntry
      */
-    public static synchronized void removeServiceInformation(ServiceRegisterEntry objServiceRegisterEntry){
+    public static void removeServiceInformation(ServiceRegisterEntry objServiceRegisterEntry){
         if(objServiceRegisterEntry != null)
             serviceListCache.remove(objServiceRegisterEntry);
     }
@@ -44,7 +44,7 @@ public class ServiceRegisterRepository {
      * remove the service information domain list from the repository
      * @param objServiceRegisterEntryList
      */
-    public static synchronized void removeServiceInformationList(List<ServiceRegisterEntry> objServiceRegisterEntryList){
+    public static void removeServiceInformationList(List<ServiceRegisterEntry> objServiceRegisterEntryList){
         if(objServiceRegisterEntryList != null)
             serviceListCache.removeAll(objServiceRegisterEntryList);
     }
@@ -53,7 +53,7 @@ public class ServiceRegisterRepository {
     /**
      * clear the service information domain
      */
-    public static synchronized void clear(){
+    public static void clear(){
         serviceListCache.clear();
     }
 
@@ -62,7 +62,7 @@ public class ServiceRegisterRepository {
      * @param serviceName
      * @return
      */
-    public static synchronized List<ServiceRegisterEntry> getServiceInformationList(String serviceName){
+    public static List<ServiceRegisterEntry> getServiceInformationList(String serviceName){
         List<ServiceRegisterEntry> resultList = new LinkedList<ServiceRegisterEntry>();
         if(StringUtils.isEmpty(serviceName))
             return resultList;

@@ -12,7 +12,7 @@ import java.util.Random;
  * default route choose , random choose
  * Created by hzxuzhonglin on 2015/7/14.
  */
-public class DefaultMultiConnectionRoute implements MultiConnectionRoute {
+public class RandomMultiConnectionRoute implements MultiConnectionRoute {
 
     @Override
     public WorkingChannelStoreBean chooseRoute(String address, int port) {

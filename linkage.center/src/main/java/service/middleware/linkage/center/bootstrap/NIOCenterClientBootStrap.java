@@ -3,13 +3,15 @@ package service.middleware.linkage.center.bootstrap;
 import service.middleware.linkage.center.route.DefaultServiceCenterRoute;
 import service.middleware.linkage.center.serviceaccess.NIORouteServiceAccess;
 import service.middleware.linkage.framework.access.ServiceAccess;
-import service.middleware.linkage.framework.access.domain.ServiceRegisterEntry;
 import service.middleware.linkage.framework.access.impl.ServiceAccessImpl;
 import service.middleware.linkage.framework.bootstrap.AbstractBootStrap;
 import service.middleware.linkage.framework.handlers.AccessClientHandler;
 import service.middleware.linkage.framework.handlers.DefaultEventDistributionMaster;
 import service.middleware.linkage.framework.io.Client;
 import service.middleware.linkage.framework.io.nio.NIOClient;
+import service.middleware.linkage.framework.io.nio.connection.NIOConnectionManager;
+import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
+import service.middleware.linkage.framework.route.impl.RandomMultiConnectionRoute;
 import service.middleware.linkage.framework.setting.reader.ClientSettingPropertyReader;
 import service.middleware.linkage.framework.setting.reader.ClientSettingReader;
 
@@ -40,7 +42,8 @@ public class NIOCenterClientBootStrap extends AbstractBootStrap implements Runna
         }
         // this is a client, in this client it will be a gather place where we will start the worker pool & task handler
         this.client = new NIOClient(this.getWorkerPool());
-        ServiceAccess serviceAccess = new ServiceAccessImpl(objServicePropertyEntity);
+        NIOConnectionManager nioConnectionManager = new NIOConnectionManager(new RandomMultiConnectionRoute(), WorkingChannelMode.MESSAGE, this.getWorkerPool());
+        ServiceAccess serviceAccess = new ServiceAccessImpl(objServicePropertyEntity, nioConnectionManager);
         this.serviceAccess = new NIORouteServiceAccess(serviceAccess, new DefaultServiceCenterRoute(serviceAccess, centerAddress, centerPort));
         this.getWorkerPool().getEventDistributionHandler().addHandler(new AccessClientHandler());
     }

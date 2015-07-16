@@ -9,6 +9,7 @@ import service.middleware.linkage.framework.io.WorkingChannelOperationResult;
 import service.middleware.linkage.framework.io.WorkingChannelStrategy;
 import service.middleware.linkage.framework.io.nio.strategy.WorkingChannelMode;
 import service.middleware.linkage.framework.io.nio.strategy.mixed.NIOMessageStrategy;
+import service.middleware.linkage.framework.repository.WorkingChannelRepository;
 
 import java.nio.channels.Channel;
 import java.nio.channels.SelectionKey;
@@ -69,8 +70,11 @@ public class NIOWorkingChannelContext implements WorkingChannelContext {
         if (this.getKey() != null) {
             key.cancel();
         }
+        WorkingChannelRepository.removeWorkingChannelStoreBean(this.getId());
         this.getLinkageSocketChannel().close();
-        this.getWorkingChannelStrategy().closeStrategy();
+        if(this.getWorkingChannelStrategy() != null) {
+            this.getWorkingChannelStrategy().closeStrategy();
+        }
     }
 
     public LinkageSocketChannel getLinkageSocketChannel() {

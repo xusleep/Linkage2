@@ -29,6 +29,7 @@ public class ServiceJsonUtils {
                         serviceRequestReturn.setMethodName(jsonElement.getAsJsonObject().get("methodName").getAsString());
                         serviceRequestReturn.setVersion(jsonElement.getAsJsonObject().get("version").getAsString());
                         serviceRequestReturn.setGroup(jsonElement.getAsJsonObject().get("group").getAsString());
+                        serviceRequestReturn.setRequestID(jsonElement.getAsJsonObject().get("requestID").getAsString());
                         JsonArray jsonArrayArgs = (JsonArray) jsonElement.getAsJsonObject().get("serviceParameters");
                         List<ServiceParameter> parameterList = new LinkedList<ServiceParameter>();
                         serviceRequestReturn.setServiceParameters(parameterList);

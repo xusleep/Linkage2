@@ -1,5 +1,6 @@
 package linkage.common;
 
+import java.net.InetSocketAddress;
 import java.util.UUID;
 
 /**
@@ -19,4 +20,10 @@ public class CommonUtils {
     public static String getNetKey(String address, int port){
         return address + "_" + port;
     }
+
+    public static String getNetKey(InetSocketAddress socketAddress){
+        String key = socketAddress.getHostString() + "_" + socketAddress.getPort();
+        return key;
+    }
+
 }
