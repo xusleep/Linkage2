@@ -8,7 +8,6 @@ import service.middleware.linkage.framework.access.domain.ServiceRequest;
 import service.middleware.linkage.framework.access.domain.ServiceResponse;
 
 import java.lang.reflect.Type;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -46,28 +45,28 @@ public class ServiceJsonUtils {
                         try {
                             ServiceParameter serviceParameter = null;
                             JsonObject jsonObject = jsonElement.getAsJsonObject();
-                            String name = jsonObject.get("name").getAsString();
-                            String type1 = jsonObject.get("type").getAsString();
-                            if (type1.equals(int.class.getName())) {
-                                serviceParameter = new ServiceParameter(name, int.class, jsonObject.get("value").getAsInt());
-                            } else if (type1.equals(Integer.class.getName())) {
-                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsInt());
-                            } else if (type1.equals(String.class.getName())) {
-                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsString());
-                            } else if (type1.equals(Double.class.getName())) {
-                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsDouble());
-                            } else if (type1.contains("double")) {
-                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsDouble());
-                            } else if (type1.contains("Long")) {
-                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsLong());
-                            } else if (type1.contains("long")) {
-                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsLong());
-                            } else if (type1.contains("Float")) {
-                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsFloat());
-                            } else if (type1.contains("float")) {
-                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsFloat());
+                            String parameterName = jsonObject.get("parameterName").getAsString();
+                            String parameterTypeName = jsonObject.get("parameterTypeName").getAsString();
+                            if (parameterTypeName.equals(int.class.getName())) {
+                                serviceParameter = new ServiceParameter(parameterName, int.class, jsonObject.get("parameterValue").getAsInt());
+                            } else if (parameterTypeName.equals(Integer.class.getName())) {
+                                serviceParameter = new ServiceParameter(parameterName, Integer.class, jsonObject.get("parameterValue").getAsInt());
+                            } else if (parameterTypeName.equals(String.class.getName())) {
+                                serviceParameter = new ServiceParameter(parameterName, String.class, jsonObject.get("parameterValue").getAsString());
+                            } else if (parameterTypeName.equals(Double.class.getName())) {
+                                serviceParameter = new ServiceParameter(parameterName, Double.class, jsonObject.get("parameterValue").getAsDouble());
+                            } else if (parameterTypeName.equals(double.class.getName())) {
+                                serviceParameter = new ServiceParameter(parameterName, double.class, jsonObject.get("parameterValue").getAsDouble());
+                            } else if (parameterTypeName.equals(Long.class.getName())) {
+                                serviceParameter = new ServiceParameter(parameterName, Long.class, jsonObject.get("parameterValue").getAsLong());
+                            } else if (parameterTypeName.equals(long.class.getName())) {
+                                serviceParameter = new ServiceParameter(parameterName, long.class, jsonObject.get("parameterValue").getAsLong());
+                            } else if (parameterTypeName.equals(Float.class.getName())) {
+                                serviceParameter = new ServiceParameter(parameterName, Float.class, jsonObject.get("parameterValue").getAsFloat());
+                            } else if (parameterTypeName.equals(float.class.getName())) {
+                                serviceParameter = new ServiceParameter(parameterName, float.class, jsonObject.get("parameterValue").getAsFloat());
                             } else {
-                                serviceParameter = new ServiceParameter(name, type1, jsonObject.get("value").getAsString());
+                                serviceParameter = new ServiceParameter(parameterName, String.class, jsonObject.get("parameterValue").getAsString());
                             }
                             return serviceParameter;
                         } catch (Exception ex) {
@@ -141,8 +140,7 @@ public class ServiceJsonUtils {
     public static Object[] getParameterValues(List<ServiceParameter> serviceParameters) {
         Object[] values = new Object[serviceParameters.size()];
         for (int i = 0; i < serviceParameters.size(); i++) {
-            ServiceParameter serviceParameter = serviceParameters.get(i);
-            values[i] = serviceParameter.getValue();
+            values[i] = serviceParameters.get(i).getParameterValue();
         }
         return values;
     }
@@ -156,34 +154,11 @@ public class ServiceJsonUtils {
     public static Class<?>[] getParameterTypes(List<ServiceParameter> serviceParameters) {
         Class<?>[] types = new Class<?>[serviceParameters.size()];
         for (int i = 0; i < serviceParameters.size(); i++) {
-            ServiceParameter serviceParameter = serviceParameters.get(i);
-            if (serviceParameter.getType().contains("int")) {
-                types[i] = int.class;
-            } else if (serviceParameter.getType().contains("Integer")) {
-                types[i] = Integer.class;
-            } else if (serviceParameter.getType().contains("String")) {
-                types[i] = String.class;
-            } else if (serviceParameter.getType().contains("Double")) {
-                types[i] = Double.class;
-            } else if (serviceParameter.getType().contains("double")) {
-                types[i] = double.class;
-            } else if (serviceParameter.getType().contains("Long")) {
-                types[i] = Long.class;
-            } else if (serviceParameter.getType().contains("long")) {
-                types[i] = long.class;
-            } else if (serviceParameter.getType().contains("Float")) {
-                types[i] = Float.class;
-            } else if (serviceParameter.getType().contains("float")) {
-                types[i] = float.class;
-            } else {
-                types[i] = String.class;
-            }
+            types[i] = serviceParameters.get(i).getParameterType();
         }
         return types;
     }
 
     public static void main(String[] args) {
-        ServiceRequest request = new ServiceRequest();
-        request.set
     }
 }

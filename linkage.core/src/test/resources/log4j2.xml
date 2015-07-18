@@ -2,17 +2,17 @@
 <Configuration>
     <Appenders>
         <!--
-        <Async name="db-log">
+        <Async parameterName="db-log">
             <AppenderRef ref="RollingFile"/>
         </Async>
         -->
 
-        <Console name="console" class="org.apache.log4j.ConsoleAppender">
+        <Console parameterName="console" class="org.apache.log4j.ConsoleAppender">
             <ThresholdFilter level="${log4j.level}" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %c{36} %L %M - %msg%xEx%n %X{clientIP}"/>
         </Console>
 
-        <RollingFile name="biz-log" fileName="E:/logs/biz.log" filePattern="E:/logs/biz-%d{yyyy-MM-dd}.log">
+        <RollingFile parameterName="biz-log" fileName="E:/logs/biz.log" filePattern="E:/logs/biz-%d{yyyy-MM-dd}.log">
             <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %c{36} %L %M - %msg%xEx%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -21,23 +21,23 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="service.middleware.linkage.center" level="${log4j.level}" additivity="false">
+        <Logger parameterName="service.middleware.linkage.center" level="${log4j.level}" additivity="false">
             <AppenderRef ref="biz-log"/>
             <AppenderRef ref="console"/>
         </Logger>
-        <Logger name="service.middleware.linkage.framework.bootstrap" level="${log4j.level}" additivity="false">
+        <Logger parameterName="service.middleware.linkage.framework.bootstrap" level="${log4j.level}" additivity="false">
             <AppenderRef ref="biz-log"/>
             <AppenderRef ref="console"/>
         </Logger>
-        <Logger name="service.middleware.linkage.framework.io.nio.connection.pool" level="${log4j.level}" additivity="false">
+        <Logger parameterName="service.middleware.linkage.framework.io.nio.connection.pool" level="${log4j.level}" additivity="false">
             <AppenderRef ref="biz-log"/>
             <AppenderRef ref="console"/>
         </Logger>
-        <Logger name="service.middleware.linkage.framework.handlers" level="${log4j.level}" additivity="false">
+        <Logger parameterName="service.middleware.linkage.framework.handlers" level="${log4j.level}" additivity="false">
             <AppenderRef ref="biz-log"/>
             <AppenderRef ref="console"/>
         </Logger>
-        <Logger name="service.middleware.linkage.framework.provider" level="${log4j.level}" additivity="false">
+        <Logger parameterName="service.middleware.linkage.framework.provider" level="${log4j.level}" additivity="false">
             <AppenderRef ref="biz-log"/>
             <AppenderRef ref="console"/>
         </Logger>

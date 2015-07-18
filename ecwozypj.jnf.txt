@@ -5,7 +5,7 @@
 # Your branch is up-to-date with 'origin/master'.
 #
 # Changes to be committed:
-#	new file:   .idea/.name
+#	new file:   .idea/.parameterName
 #	new file:   .idea/compiler.xml
 #	new file:   .idea/copyright/profiles_settings.xml
 #	new file:   .idea/libraries/Maven__ch_qos_logback_logback_classic_0_9_29.xml

@@ -7,7 +7,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <artifactId>linkage.all</artifactId>
     <packaging>pom</packaging>
-    <name>linkage.all</name>
+    <parameterName>linkage.all</parameterName>
 
     <modules>
         <module>linkage.center</module>

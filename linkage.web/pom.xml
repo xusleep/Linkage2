@@ -4,7 +4,7 @@
     <artifactId>linkage.web</artifactId>
     <packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-    <name>linkage.web</name>
+    <parameterName>linkage.web</parameterName>
     <url>http://maven.apache.org</url>
     
     <parent>
@@ -17,7 +17,7 @@
 	<dependencies>
 	</dependencies>
 	<build>
-		<finalName>${project.name}-${project.version}</finalName>
+		<finalName>${project.parameterName}-${project.version}</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>

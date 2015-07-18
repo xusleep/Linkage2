@@ -19,7 +19,7 @@ as provided by Sun in the GPL Version 2 section of the License file that
 accompanied this code.  If applicable, add the following below the License
 Header, with the fields enclosed by brackets [] replaced by your own
 identifying information: "Portions Copyrighted [year]
-[name of copyright owner]"
+[parameterName of copyright owner]"
 
 Contributor(s):
 
@@ -51,7 +51,7 @@ elements unless indicated otherwise.
 - In elements that contain PCDATA, leading and trailing whitespace
   in the data may be ignored.
 
-- In elements whose value is an "enumerated type", the value is
+- In elements whose parameterValue is an "enumerated type", the parameterValue is
   case sensitive.
 
 - In elements that specify a pathname to a file within the same
@@ -68,10 +68,10 @@ a web application.
 -->
 <!--
 The auth-constraint element indicates the user roles that should
-be permitted access to this resource collection. The role-name
-used here must either correspond to the role-name of one of the
+be permitted access to this resource collection. The role-parameterName
+used here must either correspond to the role-parameterName of one of the
 security-role elements defined for this web application, or be
-the specially reserved role-name "*" that is a compact syntax for
+the specially reserved role-parameterName "*" that is a compact syntax for
 indicating all roles in the web application. If both "*" and
 rolenames appear, the container interprets this as all roles.
 If no roles are defined, no user is allowed access to the portion of
@@ -111,14 +111,14 @@ security-role, security-role-ref, servlet, user-data-constraint,
 web-app, web-resource-collection
 -->
 <!--
-The display-name element contains a short name that is intended to be
-displayed by tools.  The display name need not be unique.
+The display-parameterName element contains a short parameterName that is intended to be
+displayed by tools.  The display parameterName need not be unique.
 
 Used in: filter, security-constraint, servlet, web-app
 
 Example:
 
-<display-name>Employee Self Service</display-name>
+<display-parameterName>Employee Self Service</display-parameterName>
 -->
 <!--
 The distributable element, by its presence in a web application
@@ -133,12 +133,12 @@ The ejb-link element is used in the ejb-ref or ejb-local-ref
 elements to specify that an EJB reference is linked to an
 enterprise bean.
 
-The name in the ejb-link element is composed of a
-path name specifying the ejb-jar containing the referenced enterprise
-bean with the ejb-name of the target bean appended and separated from
-the path name by "#".  The path name is relative to the war file
+The parameterName in the ejb-link element is composed of a
+path parameterName specifying the ejb-jar containing the referenced enterprise
+bean with the ejb-parameterName of the target bean appended and separated from
+the path parameterName by "#".  The path parameterName is relative to the war file
 containing the web application that is referencing the enterprise bean.
-This allows multiple enterprise beans with the same ejb-name to be
+This allows multiple enterprise beans with the same ejb-parameterName to be
 uniquely identified.
 
 Used in: ejb-local-ref, ejb-ref
@@ -155,7 +155,7 @@ The ejb-local-ref element is used for the declaration of a reference to
 an enterprise bean's local home. The declaration consists of:
 
 	- an optional description
-	- the EJB reference name used in the code of the web application
+	- the EJB reference parameterName used in the code of the web application
 	  that's referencing the enterprise bean
 	- the expected type of the referenced enterprise bean
 	- the expected local home and local interfaces of the referenced
@@ -170,7 +170,7 @@ The ejb-ref element is used for the declaration of a reference to
 an enterprise bean's home. The declaration consists of:
 
 	- an optional description
-	- the EJB reference name used in the code of
+	- the EJB reference parameterName used in the code of
 	  the web application that's referencing the enterprise bean
 	- the expected type of the referenced enterprise bean
 	- the expected home and remote interfaces of the referenced
@@ -181,18 +181,18 @@ an enterprise bean's home. The declaration consists of:
 Used in: web-app
 -->
 <!--
-The ejb-ref-name element contains the name of an EJB reference. The
+The ejb-ref-parameterName element contains the parameterName of an EJB reference. The
 EJB reference is an entry in the web application's environment and is
-relative to the java:comp/env context.  The name must be unique
+relative to the java:comp/env context.  The parameterName must be unique
 within the web application.
 
-It is recommended that name is prefixed with "ejb/".
+It is recommended that parameterName is prefixed with "ejb/".
 
 Used in: ejb-local-ref, ejb-ref
 
 Example:
 
-<ejb-ref-name>ejb/Payroll</ejb-ref-name>
+<ejb-ref-parameterName>ejb/Payroll</ejb-ref-parameterName>
 -->
 <!--
 The ejb-ref-type element contains the expected type of the
@@ -208,24 +208,24 @@ Used in: ejb-local-ref, ejb-ref
 <!--
 The env-entry element contains the declaration of a web application's
 environment entry. The declaration consists of an optional
-description, the name of the environment entry, and an optional
-value.  If a value is not specified, one must be supplied
+description, the parameterName of the environment entry, and an optional
+parameterValue.  If a parameterValue is not specified, one must be supplied
 during deployment.
 -->
 <!--
-The env-entry-name element contains the name of a web applications's
-environment entry.  The name is a JNDI name relative to the
-java:comp/env context.  The name must be unique within a web application.
+The env-entry-parameterName element contains the parameterName of a web applications's
+environment entry.  The parameterName is a JNDI parameterName relative to the
+java:comp/env context.  The parameterName must be unique within a web application.
 
 Example:
 
-<env-entry-name>minAmount</env-entry-name>
+<env-entry-parameterName>minAmount</env-entry-parameterName>
 
 Used in: env-entry
 -->
 <!--
 The env-entry-type element contains the fully-qualified Java type of
-the environment entry value that is expected by the web application's
+the environment entry parameterValue that is expected by the web application's
 code.
 
 The following are the legal values of env-entry-type:
@@ -243,14 +243,14 @@ The following are the legal values of env-entry-type:
 Used in: env-entry
 -->
 <!--
-The env-entry-value element contains the value of a web application's
-environment entry. The value must be a String that is valid for the
+The env-entry-parameterValue element contains the parameterValue of a web application's
+environment entry. The parameterValue must be a String that is valid for the
 constructor of the specified type that takes a single String
 parameter, or for java.lang.Character, a single character.
 
 Example:
 
-<env-entry-value>100.00</env-entry-value>
+<env-entry-parameterValue>100.00</env-entry-parameterValue>
 
 Used in: env-entry
 -->
@@ -266,7 +266,7 @@ or exception type to the path of a resource in the web application
 Used in: web-app
 -->
 <!--
-The exception type contains a fully qualified class name of a
+The exception type contains a fully qualified class parameterName of a
 Java exception type.
 
 Used in: error-page
@@ -280,7 +280,7 @@ Used in: mime-mapping
 <!--
 Declares a filter in the web application. The filter is mapped to
 either a servlet or a URL pattern in the filter-mapping element, using
-the filter-name value to reference. Filters can access the
+the filter-parameterName parameterValue to reference. Filters can access the
 initialization parameters declared in the deployment descriptor at
 runtime via the FilterConfig interface.
 
@@ -296,19 +296,19 @@ Declaration of the filter mappings in this web application. The
 container uses the filter-mapping declarations to decide which filters
 to apply to a request, and in what order. The container matches the
 request URI to a Servlet in the normal way. To determine which filters
-to apply it matches filter-mapping declarations either on servlet-name,
+to apply it matches filter-mapping declarations either on servlet-parameterName,
 or on url-pattern for each filter-mapping element, depending on which
 style is used. The order in which filters are invoked is the order in
 which filter-mapping declarations that match a request URI for a
-servlet appear in the list of filter-mapping elements.The filter-name
-value must be the value of the <filter-name> sub-elements of one of the
+servlet appear in the list of filter-mapping elements.The filter-parameterName
+parameterValue must be the parameterValue of the <filter-parameterName> sub-elements of one of the
 <filter> declarations in the deployment descriptor.
 
 Used in: web-app
 -->
 <!--
-The logical name of the filter. This name is used to map the filter.
-Each filter name is unique within the web application.
+The logical parameterName of the filter. This parameterName is used to map the filter.
+Each filter parameterName is unique within the web application.
 
 Used in: filter, filter-mapping
 -->
@@ -335,7 +335,7 @@ begins with a leading / and is interpreted relative to the root of the WAR.
 Used in: form-login-config
 -->
 <!--
-The home element contains the fully-qualified name of the enterprise
+The home element contains the fully-qualified parameterName of the enterprise
 bean's home interface.
 
 Used in: ejb-ref
@@ -357,7 +357,7 @@ used to represent the parent element in a GUI tool.
 Used in: filter, servlet, web-app
 -->
 <!--
-The init-param element contains a name/value pair as an
+The init-param element contains a parameterName/parameterValue pair as an
 initialization param of the servlet
 
 Used in: filter, servlet
@@ -369,9 +369,9 @@ the web application beginning with a `/'.
 Used in: servlet
 -->
 <!--
-The large-icon element contains the name of a file
+The large-icon element contains the parameterName of a file
 containing a large (32 x 32) icon image. The file
-name is a relative path within the web application's
+parameterName is a relative path within the web application's
 war file.
 
 The image may be either in the JPEG or GIF format.
@@ -391,7 +391,7 @@ Used in: web-app
 -->
 <!--
 The listener-class element declares a class in the application must be
-registered as a web application listener bean. The value is the fully qualified classname of the listener class.
+registered as a web application listener bean. The parameterValue is the fully qualified classname of the listener class.
 
 
 Used in: listener
@@ -401,20 +401,20 @@ The load-on-startup element indicates that this servlet should be
 loaded (instantiated and have its init() called) on the startup
 of the web application. The optional contents of
 these element must be an integer indicating the order in which
-the servlet should be loaded. If the value is a negative integer,
+the servlet should be loaded. If the parameterValue is a negative integer,
 or the element is not present, the container is free to load the
-servlet whenever it chooses. If the value is a positive integer
+servlet whenever it chooses. If the parameterValue is a positive integer
 or 0, the container must load and initialize the servlet as the
 application is deployed. The container must guarantee that
 servlets marked with lower integers are loaded before servlets
 marked with higher integers. The container may choose the order
-of loading of servlets with the same load-on-start-up value.
+of loading of servlets with the same load-on-start-up parameterValue.
 
 Used in: servlet
 -->
 <!--
 
-The local element contains the fully-qualified name of the
+The local element contains the fully-qualified parameterName of the
 enterprise bean's local interface.
 
 Used in: ejb-local-ref
@@ -422,21 +422,21 @@ Used in: ejb-local-ref
 -->
 <!--
 
-The local-home element contains the fully-qualified name of the
+The local-home element contains the fully-qualified parameterName of the
 enterprise bean's local home interface.
 
 Used in: ejb-local-ref
 -->
 <!--
 The location element contains the location of the resource in the web
-application relative to the root of the web application. The value of
+application relative to the root of the web application. The parameterValue of
 the location must have a leading `/'.
 
 Used in: error-page
 -->
 <!--
 The login-config element is used to configure the authentication
-method that should be used, the realm name that should be used for
+method that should be used, the realm parameterName that should be used for
 this application, and the attributes that are needed by the form login
 mechanism.
 
@@ -455,25 +455,25 @@ The mime-type element contains a defined mime type. example:
 Used in: mime-mapping
 -->
 <!--
-The param-name element contains the name of a parameter. Each parameter
-name must be unique in the web application.
+The param-parameterName element contains the parameterName of a parameter. Each parameter
+parameterName must be unique in the web application.
 
 
 Used in: context-param, init-param
 -->
 <!--
-The param-value element contains the value of a parameter.
+The param-parameterValue element contains the parameterValue of a parameter.
 
 Used in: context-param, init-param
 -->
 <!--
-The realm name element specifies the realm name to use in HTTP
+The realm parameterName element specifies the realm parameterName to use in HTTP
 Basic authorization.
 
 Used in: login-config
 -->
 <!--
-The remote element contains the fully-qualified name of the enterprise
+The remote element contains the fully-qualified parameterName of the enterprise
 bean's remote interface.
 
 Used in: ejb-ref
@@ -489,7 +489,7 @@ will sign on to the resource manager on behalf of the web application. In the
 latter case, the Container uses information that is supplied by the
 Deployer.
 
-The value of this element must be one of the two following:
+The parameterValue of this element must be one of the two following:
 
 	<res-auth>Application</res-auth>
 	<res-auth>Container</res-auth>
@@ -497,22 +497,22 @@ The value of this element must be one of the two following:
 Used in: resource-ref
 -->
 <!--
-The res-ref-name element specifies the name of a resource manager
-connection factory reference.  The name is a JNDI name relative to the
-java:comp/env context.  The name must be unique within a web application.
+The res-ref-parameterName element specifies the parameterName of a resource manager
+connection factory reference.  The parameterName is a JNDI parameterName relative to the
+java:comp/env context.  The parameterName must be unique within a web application.
 
 Used in: resource-ref
 -->
 <!--
 The res-sharing-scope element specifies whether connections obtained
 through the given resource manager connection factory reference can be
-shared. The value of this element, if specified, must be one of the
+shared. The parameterValue of this element, if specified, must be one of the
 two following:
 
 	<res-sharing-scope>Shareable</res-sharing-scope>
 	<res-sharing-scope>Unshareable</res-sharing-scope>
 
-The default value is Shareable.
+The default parameterValue is Shareable.
 
 Used in: resource-ref
 -->
@@ -527,7 +527,7 @@ Used in: resource-ref
 The resource-env-ref element contains a declaration of a web application's
 reference to an administered object associated with a resource
 in the web application's environment.  It consists of an optional
-description, the resource environment reference name, and an
+description, the resource environment reference parameterName, and an
 indication of the resource environment reference type expected by
 the web application code.
 
@@ -536,21 +536,21 @@ Used in: web-app
 Example:
 
 <resource-env-ref>
-    <resource-env-ref-name>jms/StockQueue</resource-env-ref-name>
+    <resource-env-ref-parameterName>jms/StockQueue</resource-env-ref-parameterName>
     <resource-env-ref-type>javax.jms.Queue</resource-env-ref-type>
 </resource-env-ref>
 -->
 <!--
-The resource-env-ref-name element specifies the name of a resource
-environment reference; its value is the environment entry name used in
-the web application code.  The name is a JNDI name relative to the
+The resource-env-ref-parameterName element specifies the parameterName of a resource
+environment reference; its parameterValue is the environment entry parameterName used in
+the web application code.  The parameterName is a JNDI parameterName relative to the
 java:comp/env context and must be unique within a web application.
 
 Used in: resource-env-ref
 -->
 <!--
 The resource-env-ref-type element specifies the type of a resource
-environment reference.  It is the fully qualified name of a Java
+environment reference.  It is the fully qualified parameterName of a Java
 language class or interface.
 
 Used in: resource-env-ref
@@ -558,7 +558,7 @@ Used in: resource-env-ref
 <!--
 The resource-ref element contains a declaration of a web application's
 reference to an external resource. It consists of an optional
-description, the resource manager connection factory reference name,
+description, the resource manager connection factory reference parameterName,
 the indication of the resource manager connection factory type
 expected by the web application code, the type of authentication
 (Application or Container), and an optional specification of the
@@ -570,7 +570,7 @@ Used in: web-app
 Example:
 
     <resource-ref>
-	<res-ref-name>jdbc/EmployeeAppDB</res-ref-name>
+	<res-ref-parameterName>jdbc/EmployeeAppDB</res-ref-parameterName>
 	<res-type>javax.sql.DataSource</res-type>
 	<res-auth>Container</res-auth>
 	<res-sharing-scope>Shareable</res-sharing-scope>
@@ -578,22 +578,22 @@ Example:
 -->
 <!--
 The role-link element is a reference to a defined security role. The
-role-link element must contain the name of one of the security roles
+role-link element must contain the parameterName of one of the security roles
 defined in the security-role elements.
 
 Used in: security-role-ref
 -->
 <!--
-The role-name element contains the name of a security role.
+The role-parameterName element contains the parameterName of a security role.
 
-The name must conform to the lexical rules for an NMTOKEN.
+The parameterName must conform to the lexical rules for an NMTOKEN.
 
 Used in: auth-constraint, run-as, security-role, security-role-ref
 -->
 <!--
 The run-as element specifies the run-as identity to be used for the
 execution of the web application. It contains an optional description, and
-the name of a security role.
+the parameterName of a security role.
 
 Used in: servlet
 -->
@@ -606,7 +606,7 @@ Used in: web-app
 <!--
 The security-role element contains the definition of a security
 role. The definition consists of an optional description of the
-security role, and the security role name.
+security role, and the security role parameterName.
 
 Used in: web-app
 
@@ -617,17 +617,17 @@ Example:
 	    This role includes all employees who are authorized
 	    to access the employee service application.
 	</description>
-	<role-name>employee</role-name>
+	<role-parameterName>employee</role-parameterName>
     </security-role>
 -->
 <!--
 The security-role-ref element contains the declaration of a security
 role reference in the web application's code. The declaration consists
-of an optional description, the security role name used in the code,
+of an optional description, the security role parameterName used in the code,
 and an optional link to a security role. If the security role is not
 specified, the Deployer must choose an appropriate security role.
 
-The value of the role-name element must be the String used as the
+The parameterValue of the role-parameterName element must be the String used as the
 parameter to the EJBContext.isCallerInRole(String roleName) method
 or the HttpServletRequest.isUserInRole(String role) method.
 
@@ -642,7 +642,7 @@ present, then the JSP should be precompiled and loaded.
 Used in: web-app
 -->
 <!--
-The servlet-class element contains the fully qualified class name
+The servlet-class element contains the fully qualified class parameterName
 of the servlet.
 
 Used in: servlet
@@ -654,8 +654,8 @@ and a url pattern
 Used in: web-app
 -->
 <!--
-The servlet-name element contains the canonical name of the
-servlet. Each servlet name is unique within the web application.
+The servlet-parameterName element contains the canonical parameterName of the
+servlet. Each servlet parameterName is unique within the web application.
 
 Used in: filter-mapping, servlet, servlet-mapping
 -->
@@ -675,9 +675,9 @@ behaviour of sessions is never to time out.
 Used in: session-config
 -->
 <!--
-The small-icon element contains the name of a file
+The small-icon element contains the parameterName of a file
 containing a small (16 x 16) icon image. The file
-name is a relative path within the web application's
+parameterName is a relative path within the web application's
 war file.
 
 The image may be either in the JPEG or GIF format.
@@ -712,7 +712,7 @@ Used in: taglib
 The transport-guarantee element specifies that the communication
 between client and server should be NONE, INTEGRAL, or
 CONFIDENTIAL. NONE means that the application does not require any
-transport guarantees. A value of INTEGRAL means that the application
+transport guarantees. A parameterValue of INTEGRAL means that the application
 requires that the data sent between the client and server be sent in
 such a way that it can't be changed in transit. CONFIDENTIAL means
 that the application requires that the data be transmitted in a
@@ -745,13 +745,13 @@ methods.
 Used in: security-constraint
 -->
 <!--
-The web-resource-name contains the name of this web resource
+The web-resource-parameterName contains the parameterName of this web resource
 collection.
 
 Used in: web-resource-collection
 -->
 <!--
-The welcome-file element contains file name to use as a default
+The welcome-file element contains file parameterName to use as a default
 welcome file, such as index.html
 
 Used in: welcome-file-list

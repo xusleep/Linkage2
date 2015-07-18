@@ -6,31 +6,31 @@
 <!-- 定义一些启动参数 -->
 <!-- <bean id=""></bean> -->
 <bean id="addService" class="service.framework.io.client.comsume.ConsumerBean">
-	<property name="multiConnectionRoute">
+	<property parameterName="multiConnectionRoute">
 		<ref bean="linkedToServiceDirectly"></ref>
 	</property>
-	<property name="workerPool">
+	<property parameterName="workerPool">
 		<ref bean="clientworkerPool"></ref>
 	</property>
-	<property name="serviceName">
-		<value>calculator</value>
+	<property parameterName="serviceName">
+		<parameterValue>calculator</parameterValue>
 	</property>
-	<property name="methodName">
-		<value>add</value>
+	<property parameterName="methodName">
+		<parameterValue>add</parameterValue>
 	</property>
-	<property name="version">
-		<value>1.0.0</value>
+	<property parameterName="version">
+		<parameterValue>1.0.0</parameterValue>
 	</property>
-	<property name="group">
-		<value>test</value>
+	<property parameterName="group">
+		<parameterValue>test</parameterValue>
 	</property>
 </bean>
 <!-- 设置客户端连接路由，该路由将从服务中心取得服务列表，并从服务列表中获得一个服务 -->
 <bean id="clientRoute" class= "service.framework.multiConnectionRoute.ClientRoute">
-	<property name="serviceCenterConsumerBean">
+	<property parameterName="serviceCenterConsumerBean">
 		<ref bean="linkedToServiceCenterCB"></ref>
 	</property>
-	<property name="filters">
+	<property parameterName="filters">
 		<list>
 			<bean class="service.framework.multiConnectionRoute.filters.ClientRouteFilter"></bean>
 		</list>
@@ -38,62 +38,62 @@
 </bean>
 <!-- 设置连接到注册中心的配置 -->
 <bean id="linkedToServiceCenterCB" class="service.framework.io.client.comsume.ConsumerBean">
-	<property name="multiConnectionRoute">
+	<property parameterName="multiConnectionRoute">
 		<ref bean="linkedToServiceCenter"></ref>
 	</property>
-	<property name="workerPool">
+	<property parameterName="workerPool">
 		<ref bean="clientworkerPool"></ref>
 	</property>
-	<property name="serviceName">
-		<value>serviceCenter</value>
+	<property parameterName="serviceName">
+		<parameterValue>serviceCenter</parameterValue>
 	</property>
-	<property name="methodName">
-		<value>getServiceList</value>
+	<property parameterName="methodName">
+		<parameterValue>getServiceList</parameterValue>
 	</property>
-	<property name="version">
-		<value>1.0.0</value>
+	<property parameterName="version">
+		<parameterValue>1.0.0</parameterValue>
 	</property>
-	<property name="group">
-		<value>test</value>
+	<property parameterName="group">
+		<parameterValue>test</parameterValue>
 	</property>
 </bean>
 <bean id="linkedToServiceCenter" class="service.framework.multiConnectionRoute.DefaultRoute">
-	<property name="serviceList">
+	<property parameterName="serviceList">
 		<list>
 			<bean class="servicecenter.service.ServiceInformation">
-				<property name="address">
-					<value>localhost</value>
+				<property parameterName="address">
+					<parameterValue>localhost</parameterValue>
 				</property>
-				<property name="port">
-					<value>5002</value>
+				<property parameterName="port">
+					<parameterValue>5002</parameterValue>
 				</property>
 			</bean>
 		</list>
 	</property>
 </bean>
 <bean id="linkedToServiceDirectly" class="service.framework.multiConnectionRoute.DefaultRoute">
-	<property name="serviceList">
+	<property parameterName="serviceList">
 		<list>
 			<bean class="servicecenter.service.ServiceInformation">
-				<property name="address">
-					<value>localhost</value>
+				<property parameterName="address">
+					<parameterValue>localhost</parameterValue>
 				</property>
-				<property name="port">
-					<value>5001</value>
+				<property parameterName="port">
+					<parameterValue>5001</parameterValue>
 				</property>
 			</bean>
 		</list>
 	</property>
 </bean>
 <bean id="linkedToService" class="service.framework.multiConnectionRoute.DefaultRoute">
-	<property name="serviceList">
+	<property parameterName="serviceList">
 		<list>
 			<bean class="servicecenter.service.ServiceInformation">
-				<property name="address">
-					<value>localhost</value>
+				<property parameterName="address">
+					<parameterValue>localhost</parameterValue>
 				</property>
-				<property name="port">
-					<value>5001</value>
+				<property parameterName="port">
+					<parameterValue>5001</parameterValue>
 				</property>
 			</bean>
 		</list>
@@ -110,7 +110,7 @@
 </bean>
 <bean id="clientmasterHandler" class="service.framework.io.fire.MasterHandler">
 	<constructor-arg>
-		<value>5</value>
+		<parameterValue>5</parameterValue>
 	</constructor-arg>
 </bean>
 <bean id="clientworkerPool" class="service.framework.io.server.DefaultWorkerPool">

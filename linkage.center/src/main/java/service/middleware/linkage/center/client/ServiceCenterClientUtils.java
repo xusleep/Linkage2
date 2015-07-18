@@ -105,11 +105,11 @@ import org.slf4j.LoggerFactory;
 //					ServiceRegisterEntry subServiceInformation = new ServiceRegisterEntry();
 //					subServiceInformation.setAddress(workingServicePropertyEntity.getServiceAddress());
 //					subServiceInformation.setPort(workingServicePropertyEntity.getServicePort());
-//					subServiceInformation.setServiceMethod(methods[i].getName());
+//					subServiceInformation.setServiceMethod(methods[i].getParameterName());
 //					subServiceInformation.setServiceName(serviceEntity.getServiceName());
 //					subServiceInformation.setServiceVersion(serviceEntity.getServiceVersion());
 //					SERVICE_REGISTER_ENTRY_LIST.add(subServiceInformation);
-//					logger.debug("service name : " + serviceEntity.getServiceName() + " method name : " + methods[i].getName());
+//					logger.debug("service name : " + serviceEntity.getServiceName() + " method name : " + methods[i].getParameterName());
 //				}
 //			} catch (ClassNotFoundException e) {
 //				e.printStackTrace();

@@ -25,7 +25,7 @@ public class StartClientMoreConnection extends AbstractJob {
 	public static final AtomicInteger aint = new AtomicInteger(0);
 	public static final AtomicInteger successCount = new AtomicInteger(0);
 	public static final AtomicInteger requestCount = new AtomicInteger(0);
-	public static final int THREAD_COUNT = 1;
+	public static final int THREAD_COUNT = 10;
 	public static final int CAL_COUNT = 10000;
 	public static final CountDownLatch countDown = new CountDownLatch(THREAD_COUNT * CAL_COUNT);
 	public StartClientMoreConnection() {
@@ -66,7 +66,7 @@ public class StartClientMoreConnection extends AbstractJob {
 
 			try
 			{
-				Thread.sleep(1000);
+				Thread.sleep(1);
 			}
 			catch (Exception ex){
 				ex.printStackTrace();

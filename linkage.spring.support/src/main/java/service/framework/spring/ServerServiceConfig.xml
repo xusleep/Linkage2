@@ -6,75 +6,75 @@
 <bean id="staticsGatherImpl" class="service.framework.io.server.statistics.DefaultServerStatistics"></bean>
 <!-- 提供一个收集服务器信息的一个服务，服务中心可以收集该信息，以获得路由的决策 -->
 <bean id="staticsGather" class="service.framework.provide.ProviderBean">
-	<property name="interfaceName">
-		<value>service.framework.io.server.statistics.ServerStatistics</value>
+	<property parameterName="interfaceName">
+		<parameterValue>service.framework.io.server.statistics.ServerStatistics</parameterValue>
 	</property>
-	<property name="version">
-		<value>1.0.0</value>
+	<property parameterName="version">
+		<parameterValue>1.0.0</parameterValue>
 	</property>
-	<property name="group">
-		<value>test</value>
+	<property parameterName="group">
+		<parameterValue>test</parameterValue>
 	</property>
-	<property name="target">
+	<property parameterName="target">
 		<ref bean="staticsGatherImpl"></ref>
 	</property>
 </bean>
 <!-- 定义一些启动参数 -->
 <!-- <bean id=""></bean> -->
 <bean id="addService" class="service.framework.provide.ProviderBean">
-	<property name="interfaceName">
-		<value>test.service.Calculator</value>
+	<property parameterName="interfaceName">
+		<parameterValue>test.service.Calculator</parameterValue>
 	</property>
-	<property name="version">
-		<value>1.0.0</value>
+	<property parameterName="version">
+		<parameterValue>1.0.0</parameterValue>
 	</property>
-	<property name="group">
-		<value>test</value>
+	<property parameterName="group">
+		<parameterValue>test</parameterValue>
 	</property>
-	<property name="target">
+	<property parameterName="target">
 		<ref bean="calculatorImpl"></ref>
 	</property>
 </bean>
 <bean id="calculatorImpl" class="test.service.CalculatorImpl"></bean>
 <bean id="centerServiceRegisterEntry" class="servicecenter.service.ServiceInformation">
-	<property name="address">
-		<value>localhost</value>
+	<property parameterName="address">
+		<parameterValue>localhost</parameterValue>
 	</property>
-	<property name="port">
-		<value>5002</value>
+	<property parameterName="port">
+		<parameterValue>5002</parameterValue>
 	</property>
 </bean>
 <!-- 设置连接到注册中心的配置 -->
 <bean id="linkToServiceCenter" class="service.framework.io.client.comsume.ConsumerBean">
-	<property name="multiConnectionRoute">
+	<property parameterName="multiConnectionRoute">
 		<ref bean="linkedToServiceCenterInform"></ref>
 	</property>
-	<property name="workerPool">
+	<property parameterName="workerPool">
 		<ref bean="clientworkerPool"></ref>
 	</property>
-	<property name="serviceName">
-		<value>serviceCenter</value>
+	<property parameterName="serviceName">
+		<parameterValue>serviceCenter</parameterValue>
 	</property>
-	<property name="methodName">
-		<value>register</value>
+	<property parameterName="methodName">
+		<parameterValue>register</parameterValue>
 	</property>
-	<property name="version">
-		<value>1.0.0</value>
+	<property parameterName="version">
+		<parameterValue>1.0.0</parameterValue>
 	</property>
-	<property name="group">
-		<value>test</value>
+	<property parameterName="group">
+		<parameterValue>test</parameterValue>
 	</property>
 </bean>
 <!-- 设置连接到服务器注册中心的路由 -->
 <bean id="linkedToServiceCenterInform" class="service.framework.multiConnectionRoute.DefaultRoute">
-	<property name="serviceList">
+	<property parameterName="serviceList">
 		<list>
 			<bean class="servicecenter.service.ServiceInformation">
-				<property name="address">
-					<value>localhost</value>
+				<property parameterName="address">
+					<parameterValue>localhost</parameterValue>
 				</property>
-				<property name="port">
-					<value>5002</value>
+				<property parameterName="port">
+					<parameterValue>5002</parameterValue>
 				</property>
 			</bean>
 		</list>
@@ -93,16 +93,16 @@
 	</constructor-arg>
 </bean>
 <bean id="serviceInformation" class="servicecenter.service.ServiceInformation">
-	<property name="address">
-		<value>localhost</value>
+	<property parameterName="address">
+		<parameterValue>localhost</parameterValue>
 	</property>
-	<property name="port">
-		<value>5001</value>
+	<property parameterName="port">
+		<parameterValue>5001</parameterValue>
 	</property>
 </bean>
 <bean id="masterHandler" class="service.framework.io.fire.MasterHandler">
 	<constructor-arg>
-		<value>5</value>
+		<parameterValue>5</parameterValue>
 	</constructor-arg>
 </bean>
 <bean id="workerPool" class="service.framework.io.server.DefaultWorkerPool">
@@ -121,7 +121,7 @@
 </bean>
 <bean id="clientmasterHandler" class="service.framework.io.fire.MasterHandler">
 	<constructor-arg>
-		<value>1</value>
+		<parameterValue>1</parameterValue>
 	</constructor-arg>
 </bean>
 <bean id="clientworkerPool" class="service.framework.io.server.DefaultWorkerPool">
